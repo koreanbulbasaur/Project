@@ -14,7 +14,9 @@ class WindowClass(QMainWindow, form_class):
         self.action_save.triggered.connect(self.saveFunction)
 
     def openFunction(self):
-        print('open')
+        # 파일 불러오기
+        fname = QFileDialog.getOpenFileName(self)
+        print(fname[0])
 
     def saveFunction(self):
         print('save')
