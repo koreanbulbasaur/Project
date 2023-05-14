@@ -87,6 +87,24 @@
     </property>
    </widget>
   </widget>
+  <widget class="QPushButton" name="second_next_btn">
+   <property name="geometry">
+    <rect>
+     <x>770</x>
+     <y>20</y>
+     <width>131</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>15</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>다음</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>
