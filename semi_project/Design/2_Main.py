@@ -68,6 +68,8 @@ class SecondOption(QDialog):
         self.firsttable = self.first_table
         self.secondtable = self.second_table
 
+        self.df_option = None
+
         self.second_next_btn.clicked.connect(self.thirdwindow)
         self.T_btn.clicked.connect(self.retrieveCheckboxValues)
 
@@ -106,33 +108,60 @@ class SecondOption(QDialog):
         self.show()
 
     def thirdwindow(self):
-        self.reject()
-        ThirdOption(self, self.df)
+        row_list = []
+        col_list = []
 
-    def retrieveCheckboxValues(self):
         for row in range(self.firsttable.rowCount()):
             if self.firsttable.item(row, 0).checkState() == Qt.CheckState.Checked:
-                print([self.firsttable.item(row, col).text()
-                      for col in range(self.firsttable.columnCount())])
+                print(self.firsttable.item(row, 0).text())
+                row_list.append(row)
+        
+        for col in range(self.secondtable.rowCount()):
+            if self.secondtable.item(col, 0).checkState() == Qt.CheckState.Checked:
+                print(self.secondtable.item(col, 0).text())
+                col_list.append(col)
+
         print('-'*100)
+        print(row_list)
+        print(col_list)
+
+        self.df_option = self.df.iloc[row_list, col_list]
+        # print(self.df_option)
+
+        self.reject()
+        ThirdOption(self)
+
+    def retrieveCheckboxValues(self):
+        pass
 
 class ThirdOption(QDialog):
-    def __init__(self, parent, df):
+    def __init__(self, parent):
         super(ThirdOption, self).__init__(parent)
         uic.loadUi(r'C:\Project\semi_project\Design\2_third_option.ui', self)
 
-        self.df = df
-
         self.complete_btn.clicked.connect(self.create_graph)
+
+        self.df_option = self.parent().df_option
 
         self.show()
 
     def create_graph(self):
-        row = self.tableWidget.currentRow()
-        col = self.tableWidget.currentColumn()
-        value = self.df.iloc[row, col]
-        # value 값을 이용하여 차트 그리기
-        self.reject()
+
+        N = self.df_option.shape[0]
+        index = np.arange(N)
+
+        w = -0.25
+
+        matplotlib.rcParams['font.family'] = 'Malgun Gothic'
+        matplotlib.rcParams['font.size'] = 15 # 글자크기
+        matplotlib.rcParams['axes.unicode_minus']=False
+
+        for col in self.df_option.columns:
+            plt.bar(index + w, self.df_option[col], width=0.25)
+            w += 0.25
+        plt.legend()
+        plt.xticks(index, self.df_option.index)
+        plt.show()
 
 
 app = QApplication(sys.argv)
