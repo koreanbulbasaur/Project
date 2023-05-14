@@ -48,7 +48,7 @@
    <property name="title">
     <string>범례 항목</string>
    </property>
-   <widget class="QTableWidget" name="tableWidget">
+   <widget class="QTableWidget" name="first_table">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -76,7 +76,7 @@
    <property name="title">
     <string>가로(항목) 축 레이블</string>
    </property>
-   <widget class="QTableWidget" name="tableWidget_2">
+   <widget class="QTableWidget" name="second_table">
     <property name="geometry">
      <rect>
       <x>0</x>

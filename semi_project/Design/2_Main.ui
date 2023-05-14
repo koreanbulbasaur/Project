@@ -87,7 +87,7 @@
       <property name="title">
        <string>파일</string>
       </property>
-      <widget class="QPlainTextEdit" name="plainTextEdit">
+      <widget class="QPlainTextEdit" name="text_file">
        <property name="geometry">
         <rect>
          <x>3</x>
