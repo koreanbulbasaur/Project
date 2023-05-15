@@ -84,7 +84,7 @@ class SecondOption(QDialog):
             self.df = pd.read_csv(data)
         elif data.endswith('.xlsx'):
             # print(self.header_Index)
-            self.df = pd.read_excel(data, index_col=self.index_Col,header=header_Index)
+            self.df = pd.read_excel(data, index_col=self.index_Col, header=self.header_Index)
 
         self.firsttable.setRowCount(len(self.df))
         self.firsttable.setColumnCount(1)
