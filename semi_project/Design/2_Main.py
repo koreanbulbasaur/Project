@@ -152,13 +152,13 @@ class ThirdOption(QDialog):
         N = self.df_option.shape[0]
         index = np.arange(N)
 
-        w = -0.25
+        w = 0.25
 
         matplotlib.rcParams['font.family'] = 'Malgun Gothic'
         matplotlib.rcParams['font.size'] = 15 # 글자크기
         matplotlib.rcParams['axes.unicode_minus']=False
 
-        for col in self.df_option.columns:
+        for col, index in self.df_option.columns,len(self.df_option.columns):
             plt.bar(index + w, self.df_option[col], width=0.25)
             w += 0.25
         plt.legend()
