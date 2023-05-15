@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from PyQt5.QtWidgets import QTableWidgetItem, QAbstractItemView
 from PyQt5.QtCore import Qt
+import statistics
 
 matplotlib.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.rcParams['font.size'] = 15 # 글자크기
@@ -149,22 +150,53 @@ class ThirdOption(QDialog):
     def create_graph(self):
 
         self.reject()
-        N = self.df_option.shape[0]
-        index = np.arange(N)
+        self.plot_graph()
 
-        w = 0.25
-
+    def plot_graph(self):
         matplotlib.rcParams['font.family'] = 'Malgun Gothic'
         matplotlib.rcParams['font.size'] = 15 # 글자크기
         matplotlib.rcParams['axes.unicode_minus']=False
 
-        for col, index in self.df_option.columns,len(self.df_option.columns):
-            plt.bar(index + w, self.df_option[col], width=0.25)
-            w += 0.25
-        plt.legend()
-        plt.xticks(index, self.df_option.index)
-        plt.show()
+        N = self.df_option.shape[0]
+        index = np.arange(N) * 5
+        index_v = len(self.df_option.columns)
+        index_list = list(range(1, len(self.df_option.columns) + 1))
 
+        w = 0.45
+
+        if index_v % 2 == 0:
+            for col, x in zip(self.df_option.columns, index_list):
+                w_value = None
+                if statistics.median(index_list) > x:
+                    a = int(statistics.median(index_list)) - x + 1
+                    w_value = -(a * w)
+                    plt.bar(index + w_value, self.df_option[col], width=w)
+                else:
+                    b = x - int(statistics.median(index_list))
+                    w_value = b * w
+                    plt.bar(index + w_value, self.df_option[col], width=w)
+                print(w_value)
+            plt.legend()
+            plt.xticks(index + w/2, self.df_option.index)
+            plt.show()
+        else:
+            for col, x in zip(self.df_option.columns, index_list):
+                w_value = None
+                if statistics.median(index_list) > x:
+                    a = int(statistics.median(index_list)) - x
+                    w_value = -(a * w)
+                    plt.bar(index + w_value, self.df_option[col], width=w)
+                elif x == statistics.median(index_list):
+                    w_value = 0
+                    plt.bar(index + w_value, self.df_option[col], width=w)
+                else:
+                    b = x - int(statistics.median(index_list))
+                    w_value = b * w
+                    plt.bar(index + w_value, self.df_option[col], width=w)
+                print(w_value)
+            plt.legend()
+            plt.xticks(index, self.df_option.index)
+            plt.show()
 
 app = QApplication(sys.argv)
 mainWindow = WindowClass()
