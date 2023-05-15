@@ -109,7 +109,7 @@ class SecondOption(QDialog):
                     self.table.setItem(row, col, item)
                 else:
                     self.df.index = self.df.index.astype('object')
-                    item = QTableWidgetItem(str(self.df.index[row-1]))
+                    item = QTableWidgetItem(str(self.df.iloc[row-1, col-1]))
                     self.table.setItem(row, col, item)
 
         self.show()
@@ -139,6 +139,11 @@ class SecondOption(QDialog):
                 if self.table.item(0, col).checkState() == Qt.CheckState.Checked:
                     # print(self.table.item(row, 0).text())
                     col_list.append(col-1)
+
+            self.df_option = self.df.iloc[row_list, col_list]
+
+            self.reject()
+            ThirdOption(self)
         else:
             pass
 
@@ -146,11 +151,6 @@ class SecondOption(QDialog):
         print(row_index, col_index)
         print(row_list)
         print(col_list)
-
-        self.df_option = self.df.iloc[row_list, col_list]
-
-            # self.reject()
-            # ThirdOption(self)
 
 class ThirdOption(QDialog):
     def __init__(self, parent):
