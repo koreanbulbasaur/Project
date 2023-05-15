@@ -73,7 +73,7 @@ class SecondOption(QDialog):
         self.df_option = None
 
         self.second_next_btn.clicked.connect(self.thirdwindow)
-        self.T_btn.clicked.connect(self.retrieveCheckboxValues)
+        self.T_btn.clicked.connect(self.t_btn_test)
 
         self.header_Index = int(header_Index)
         self.index_Col = index_Col
@@ -113,27 +113,42 @@ class SecondOption(QDialog):
         row_list = []
         col_list = []
 
+        row_index = 0
+        col_index = 0
+
         for row in range(self.firsttable.rowCount()):
             if self.firsttable.item(row, 0).checkState() == Qt.CheckState.Checked:
-                print(self.firsttable.item(row, 0).text())
-                row_list.append(row)
+                row_index += 1
         
         for col in range(self.secondtable.rowCount()):
             if self.secondtable.item(col, 0).checkState() == Qt.CheckState.Checked:
-                print(self.secondtable.item(col, 0).text())
-                col_list.append(col)
+                col_index += 1
 
-        print('-'*100)
-        print(row_list)
-        print(col_list)
 
-        self.df_option = self.df.iloc[row_list, col_list]
-        # print(self.df_option)
+        if row_index != 0 and col_index != 0:
+            for row in range(self.firsttable.rowCount()):
+                if self.firsttable.item(row, 0).checkState() == Qt.CheckState.Checked:
+                    print(self.firsttable.item(row, 0).text())
+                    row_list.append(row)
+            
+            for col in range(self.secondtable.rowCount()):
+                if self.secondtable.item(col, 0).checkState() == Qt.CheckState.Checked:
+                    print(self.secondtable.item(col, 0).text())
+                    col_list.append(col)
 
-        self.reject()
-        ThirdOption(self)
+            print('-'*100)
+            print(row_list)
+            print(col_list)
 
-    def retrieveCheckboxValues(self):
+            self.df_option = self.df.iloc[row_list, col_list]
+            # print(self.df_option)
+
+            self.reject()
+            ThirdOption(self)
+        else:
+            pass
+
+    def t_btn_test(self):
         pass
 
 class ThirdOption(QDialog):
