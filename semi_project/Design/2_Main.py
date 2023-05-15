@@ -57,8 +57,9 @@ class FirstOption(QDialog):
 
         data = self.parent().file_name
 
-        self.reject()
-        SecondOption(self.parent(), data, header_Index, index_Col)
+        if header_Index != '':
+            self.reject()
+            SecondOption(self.parent(), data, header_Index, index_Col)
 
 class SecondOption(QDialog):
     def __init__(self, parent, data, header_Index, index_Col):
@@ -147,6 +148,7 @@ class ThirdOption(QDialog):
 
     def create_graph(self):
 
+        self.reject()
         N = self.df_option.shape[0]
         index = np.arange(N)
 
