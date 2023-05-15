@@ -65,15 +65,13 @@ class FirstOption(QDialog):
 class SecondOption(QDialog):
     def __init__(self, parent, data, header_Index, index_Col):
         super(SecondOption, self).__init__(parent)
-        uic.loadUi(r'C:\Project\semi_project\Design\2_second_option.ui', self)
+        uic.loadUi(r'C:\Project\semi_project\Design\3_second_option.ui', self)
 
-        self.firsttable = self.first_table
-        self.secondtable = self.second_table
+        self.table = self.first_table
 
         self.df_option = None
 
         self.second_next_btn.clicked.connect(self.thirdwindow)
-        self.T_btn.clicked.connect(self.t_btn_test)
 
         self.header_Index = int(header_Index)
         self.index_Col = int(index_Col)
@@ -86,16 +84,16 @@ class SecondOption(QDialog):
             # print(self.header_Index)
             self.df = pd.read_excel(data, index_col=self.index_Col, header=self.header_Index)
 
-        self.firsttable.setRowCount(len(self.df))
-        self.firsttable.setColumnCount(1)
-        self.firsttable.setHorizontalHeaderLabels([self.df.index.name])
+        self.table.setRowCount(len(self.df))
+        self.table.setColumnCount(1)
+        self.table.setHorizontalHeaderLabels([self.df.index.name])
 
         for row in range(len(self.df)):
             self.df.index = self.df.index.astype('object')
             item = QTableWidgetItem(str(self.df.index[row]))
             item.setFlags(Qt.ItemFlag.ItemIsUserCheckable |Qt.ItemFlag.ItemIsEnabled)
             item.setCheckState(Qt.CheckState.Unchecked)
-            self.firsttable.setItem(row, 0, item)
+            self.table.setItem(row, 0, item)
 
         self.secondtable.setRowCount(len(self.df.columns))
         self.secondtable.setColumnCount(1)
@@ -116,8 +114,8 @@ class SecondOption(QDialog):
         row_index = 0
         col_index = 0
 
-        for row in range(self.firsttable.rowCount()):
-            if self.firsttable.item(row, 0).checkState() == Qt.CheckState.Checked:
+        for row in range(self.table.rowCount()):
+            if self.table.item(row, 0).checkState() == Qt.CheckState.Checked:
                 row_index += 1
         
         for col in range(self.secondtable.rowCount()):
@@ -126,9 +124,9 @@ class SecondOption(QDialog):
 
 
         if row_index != 0 and col_index != 0:
-            for row in range(self.firsttable.rowCount()):
-                if self.firsttable.item(row, 0).checkState() == Qt.CheckState.Checked:
-                    print(self.firsttable.item(row, 0).text())
+            for row in range(self.table.rowCount()):
+                if self.table.item(row, 0).checkState() == Qt.CheckState.Checked:
+                    print(self.table.item(row, 0).text())
                     row_list.append(row)
             
             for col in range(self.secondtable.rowCount()):
