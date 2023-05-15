@@ -159,12 +159,11 @@ class ThirdOption(QDialog):
 
         N = self.df_option.shape[0]
         index = np.arange(N) * 5
-        index_v = len(self.df_option.columns)
         index_list = list(range(1, len(self.df_option.columns) + 1))
 
         w = 0.45
 
-        if index_v % 2 == 0:
+        if len(self.df_option.columns) % 2 == 0:
             for col, x in zip(self.df_option.columns, index_list):
                 w_value = None
                 if statistics.median(index_list) > x:
