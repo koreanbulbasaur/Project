@@ -112,8 +112,7 @@ class SecondOption(QDialog):
     def retrieveCheckboxValues(self):
         for row in range(self.firsttable.rowCount()):
             if self.firsttable.item(row, 0).checkState() == Qt.CheckState.Checked:
-                print([self.firsttable.item(row, col).text()
-                      for col in range(self.firsttable.columnCount())])
+                print([self.firsttable.item(row, col).text() for col in range(self.firsttable.columnCount())])
         print('-'*100)
 
 class ThirdOption(QDialog):
