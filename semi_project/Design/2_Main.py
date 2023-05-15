@@ -58,7 +58,7 @@ class FirstOption(QDialog):
 
         data = self.parent().file_name
 
-        if header_Index != '':
+        if index_Col != '' and header_Index != '':
             self.reject()
             SecondOption(self.parent(), data, header_Index, index_Col)
 
@@ -76,7 +76,7 @@ class SecondOption(QDialog):
         self.T_btn.clicked.connect(self.t_btn_test)
 
         self.header_Index = int(header_Index)
-        self.index_Col = index_Col
+        self.index_Col = int(index_Col)
 
         self.data = data
 
@@ -84,7 +84,7 @@ class SecondOption(QDialog):
             self.df = pd.read_csv(data)
         elif data.endswith('.xlsx'):
             # print(self.header_Index)
-            self.df = pd.read_excel(data, index_col=self.header_Index)
+            self.df = pd.read_excel(data, index_col=self.index_Col,header=header_Index)
 
         self.firsttable.setRowCount(len(self.df))
         self.firsttable.setColumnCount(1)
@@ -168,6 +168,7 @@ class ThirdOption(QDialog):
         self.plot_graph()
 
     def plot_graph(self):
+        print(self.df_option)
         matplotlib.rcParams['font.family'] = 'Malgun Gothic'
         matplotlib.rcParams['font.size'] = 15 # 글자크기
         matplotlib.rcParams['axes.unicode_minus']=False
