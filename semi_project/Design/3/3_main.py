@@ -125,26 +125,32 @@ class SecondOption(QDialog):
             if self.table.item(row, 0).checkState() == Qt.CheckState.Checked:
                 row_index += 1
 
+        for col in range(self.table.columnCount()):
+            if self.table.item(0, col).checkState() == Qt.CheckState.Checked:
+                col_index += 1
 
         if row_index != 0 and col_index != 0:
             for row in range(self.table.rowCount()):
                 if self.table.item(row, 0).checkState() == Qt.CheckState.Checked:
-                    print(self.table.item(row, 0).text())
-                    row_list.append(row)
+                    # print(self.table.item(row, 0).text())
+                    row_list.append(row-1)
 
-            print('-'*100)
-            print(row_list)
-            print(col_list)
-
-            self.df_option = self.df.iloc[row_list, col_list]
-
-            # self.reject()
-            # ThirdOption(self)
+            for col in range(self.table.columnCount()):
+                if self.table.item(0, col).checkState() == Qt.CheckState.Checked:
+                    # print(self.table.item(row, 0).text())
+                    col_list.append(col-1)
         else:
             pass
 
-    def t_btn_test(self):
-        pass
+        print('-'*100)
+        print(row_index, col_index)
+        print(row_list)
+        print(col_list)
+
+        self.df_option = self.df.iloc[row_list, col_list]
+
+            # self.reject()
+            # ThirdOption(self)
 
 class ThirdOption(QDialog):
     def __init__(self, parent):
