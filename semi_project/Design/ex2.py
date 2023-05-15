@@ -21,6 +21,14 @@ class MyApp(QWidget):
             'QAbstractItemVies::indicator {width: 25px; height: 25px;} QTableWidget::item {width: 500px; height:40px;}')
         self.layout.addWidget(self.table)
 
+        header = QTableWidgetItem(" ")
+        header.setFlags(Qt.ItemIsEnabled | Qt.ItemIsUserCheckable)
+        header.setCheckState(Qt.Unchecked)
+        self.table.setHorizontalHeaderItem(0, header)
+
+        range_list = list(['a', 'b', 'c'])
+        self.table.setHorizontalHeaderLabels(['index', 'a', 'c'])
+
         for row in range(3):
             for col in range(3):
                 if col % 3 == 0:
@@ -30,8 +38,8 @@ class MyApp(QWidget):
                     item.setCheckState(Qt.CheckState.Unchecked)
                     self.table.setItem(row, col, item)
                 else:
-                    self.table.setItem(row, col, QTableWidgetItem(
-                        'Item {0}-{1}'.format(row, col)))
+                    item = QTableWidgetItem('Item {0}-{1}'.format(row, col))
+                    self.table.setItem(row, col, item)
 
     def retrieveCheckboxValues(self):
         for row in range(self.table.rowCount()):

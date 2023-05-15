@@ -67,7 +67,7 @@ class SecondOption(QDialog):
         super(SecondOption, self).__init__(parent)
         uic.loadUi(r'semi_project\Design\3\3_second_option.ui', self)
 
-        self.table = self.first_table
+        self.table = self.table
 
         self.df_option = None
 
@@ -84,26 +84,33 @@ class SecondOption(QDialog):
             # print(self.header_Index)
             self.df = pd.read_excel(data, index_col=self.index_Col, header=self.header_Index)
 
-        self.table.setRowCount(len(self.df))
-        self.table.setColumnCount(1)
-        self.table.setHorizontalHeaderLabels([self.df.index.name])
+        row_count = len(self.df) + 1
+        col_count = len(self.df.columns) + 1
 
-        for row in range(len(self.df)):
-            self.df.index = self.df.index.astype('object')
-            item = QTableWidgetItem(str(self.df.index[row]))
-            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable |Qt.ItemFlag.ItemIsEnabled)
-            item.setCheckState(Qt.CheckState.Unchecked)
-            self.table.setItem(row, 0, item)
+        self.table.setRowCount(row_count)
+        self.table.setColumnCount(col_count)
 
-        self.secondtable.setRowCount(len(self.df.columns))
-        self.secondtable.setColumnCount(1)
-        self.secondtable.setHorizontalHeaderLabels(['열'])
 
-        for col in range(len(self.df.columns)):
-            item = QTableWidgetItem(str(self.df.columns[col]))
-            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable |Qt.ItemFlag.ItemIsEnabled)
-            item.setCheckState(Qt.CheckState.Unchecked)
-            self.secondtable.setItem(col, 0, item)
+        for row in range(row_count):
+            for col in range(col_count):
+                if row == 0 and col == 0:
+                    self.df.index = self.df.index.astype('object')
+                    item = QTableWidgetItem(str(self.df.index.name))
+                    self.table.setItem(row, col, item)
+                elif row == 0:
+                    item = QTableWidgetItem(str(self.df.columns[col-1]))
+                    item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+                    item.setCheckState(Qt.CheckState.Unchecked)
+                    self.table.setItem(row, col, item)
+                elif col == 0:
+                    item = QTableWidgetItem(str(self.df.index[row-1]))
+                    item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
+                    item.setCheckState(Qt.CheckState.Unchecked)
+                    self.table.setItem(row, col, item)
+                else:
+                    self.df.index = self.df.index.astype('object')
+                    item = QTableWidgetItem(str(self.df.index[row-1]))
+                    self.table.setItem(row, col, item)
 
         self.show()
 
@@ -117,10 +124,6 @@ class SecondOption(QDialog):
         for row in range(self.table.rowCount()):
             if self.table.item(row, 0).checkState() == Qt.CheckState.Checked:
                 row_index += 1
-        
-        for col in range(self.secondtable.rowCount()):
-            if self.secondtable.item(col, 0).checkState() == Qt.CheckState.Checked:
-                col_index += 1
 
 
         if row_index != 0 and col_index != 0:
@@ -128,21 +131,15 @@ class SecondOption(QDialog):
                 if self.table.item(row, 0).checkState() == Qt.CheckState.Checked:
                     print(self.table.item(row, 0).text())
                     row_list.append(row)
-            
-            for col in range(self.secondtable.rowCount()):
-                if self.secondtable.item(col, 0).checkState() == Qt.CheckState.Checked:
-                    print(self.secondtable.item(col, 0).text())
-                    col_list.append(col)
 
             print('-'*100)
             print(row_list)
             print(col_list)
 
             self.df_option = self.df.iloc[row_list, col_list]
-            # print(self.df_option)
 
-            self.reject()
-            ThirdOption(self)
+            # self.reject()
+            # ThirdOption(self)
         else:
             pass
 
