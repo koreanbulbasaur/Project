@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>545</width>
-    <height>251</height>
+    <width>550</width>
+    <height>427</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,7 +19,7 @@
      <x>30</x>
      <y>20</y>
      <width>481</width>
-     <height>151</height>
+     <height>301</height>
     </rect>
    </property>
    <property name="title">
@@ -28,7 +28,7 @@
    <widget class="QRadioButton" name="mean_radio">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>20</x>
       <y>40</y>
       <width>108</width>
       <height>31</height>
@@ -46,7 +46,7 @@
    <widget class="QRadioButton" name="sum_radio">
     <property name="geometry">
      <rect>
-      <x>90</x>
+      <x>20</x>
       <y>90</y>
       <width>108</width>
       <height>31</height>
@@ -61,12 +61,12 @@
      <string>합계</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="cal_radio">
+   <widget class="QRadioButton" name="another_radio">
     <property name="geometry">
      <rect>
-      <x>290</x>
-      <y>40</y>
-      <width>121</width>
+      <x>20</x>
+      <y>140</y>
+      <width>171</width>
       <height>31</height>
      </rect>
     </property>
@@ -76,10 +76,20 @@
      </font>
     </property>
     <property name="text">
-     <string>계산</string>
+     <string>다른 데이터</string>
     </property>
-    <property name="checked">
-     <bool>true</bool>
+   </widget>
+   <widget class="QLineEdit" name="another_text">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>190</y>
+      <width>451</width>
+      <height>31</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -87,7 +97,7 @@
    <property name="geometry">
     <rect>
      <x>420</x>
-     <y>180</y>
+     <y>340</y>
      <width>93</width>
      <height>51</height>
     </rect>
