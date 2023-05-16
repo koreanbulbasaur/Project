@@ -158,6 +158,8 @@ class ThirdOption(QDialog):
 
         self.complete_btn.clicked.connect(self.create_graph)
 
+        self.cal_radio.clicked.conntect(self.radioButton_clicked)
+
         self.df_option = self.parent().df_option
 
         self.show()
@@ -166,6 +168,10 @@ class ThirdOption(QDialog):
 
         self.reject()
         self.plot_graph()
+
+    def radioButton_clicked(self):
+        if self.cal_radio.isChecked():
+            pass
 
     def plot_graph(self):
         print(self.df_option)
