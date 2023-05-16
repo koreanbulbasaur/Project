@@ -90,7 +90,6 @@ class SecondOption(QDialog):
         self.table.setRowCount(row_count)
         self.table.setColumnCount(col_count)
 
-
         for row in range(row_count):
             for col in range(col_count):
                 if row == 0 and col == 0:
