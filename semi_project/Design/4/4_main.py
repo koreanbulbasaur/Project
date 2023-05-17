@@ -158,8 +158,6 @@ class ThirdOption(QDialog):
         self.show()
 
     def create_graph(self):
-        # self.plot_graph()
-
         if self.mean_radio.isChecked():
             pass
         elif self.sum_radio.isChecked():
@@ -235,50 +233,6 @@ class ThirdOption(QDialog):
                     plt.bar(index + w_value, df[col], width=w)
             plt.legend()
             plt.xticks(index, df.index)
-            plt.show()
-
-    def plot_graph(self):
-        print(self.df_option)
-        matplotlib.rcParams['font.family'] = 'Malgun Gothic'
-        matplotlib.rcParams['font.size'] = 15 # 글자크기
-        matplotlib.rcParams['axes.unicode_minus']=False
-
-        N = self.df_option.shape[0]
-        index = np.arange(N) * 5
-        index_list = list(range(1, len(self.df_option.columns) + 1))
-
-        w = 0.45
-
-        if len(self.df_option.columns) % 2 == 0:
-            for col, x in zip(self.df_option.columns, index_list):
-                w_value = None
-                if statistics.median(index_list) > x:
-                    a = int(statistics.median(index_list)) - x + 1
-                    w_value = -(a * w)
-                    plt.bar(index + w_value, self.df_option[col], width=w)
-                else:
-                    b = x - int(statistics.median(index_list))
-                    w_value = b * w
-                    plt.bar(index + w_value, self.df_option[col], width=w)
-            plt.legend()
-            plt.xticks(index + w/2, self.df_option.index)
-            plt.show()
-        else:
-            for col, x in zip(self.df_option.columns, index_list):
-                w_value = None
-                if statistics.median(index_list) > x:
-                    a = int(statistics.median(index_list)) - x
-                    w_value = -(a * w)
-                    plt.bar(index + w_value, self.df_option[col], width=w)
-                elif x == statistics.median(index_list):
-                    w_value = 0
-                    plt.bar(index + w_value, self.df_option[col], width=w)
-                else:
-                    b = x - int(statistics.median(index_list))
-                    w_value = b * w
-                    plt.bar(index + w_value, self.df_option[col], width=w)
-            plt.legend()
-            plt.xticks(index, self.df_option.index)
             plt.show()
 
 app = QApplication(sys.argv)
