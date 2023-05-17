@@ -183,12 +183,16 @@ class ThirdOption(QDialog):
             if another_data != None:
                 if another_data.startswith('http://') or another_data.startswith('https://'):
                     df_denominator = self.Sum_Df(self.df_option)
-                    df_numerator = self.Get_Df(another_data)
+                    df_numerator = self.Get_Df_url(another_data)
                     df = self.Div_Df(df_denominator, df_numerator)
                     self.create_bar_graph(df)
                     self.reject()
                 elif another_data.endswith('.xlsx'):
-                    pass
+                    df_denominator = self.Sum_Df(self.df_option)
+                    df_numerator = self.Get_Df_xlsx(another_data)
+                    df = self.Div_Df(df_denominator, df_numerator)
+                    self.create_bar_graph(df)
+                    self.reject()
                 else:
                     QMessageBox.warning(self, '뭔 파일이여', '지원하지 않는 파일 형식입니다.')
 
@@ -292,7 +296,7 @@ class ThirdOption(QDialog):
             plt.tight_layout()
             plt.show()
 
-    def Get_Df(self, link):
+    def Get_Df_url(self, link):
         options = webdriver.ChromeOptions()
         options.add_argument("--headless=new")
         options.add_argument("window-size=1920x1080")
@@ -362,6 +366,10 @@ class ThirdOption(QDialog):
         browser.quit()
         return df_delete
 
+    def Get_Df_xlsx(self, link):
+        df = pd.read_excel(link, index_col=0)
+        return df
+    
 app = QApplication(sys.argv)
 mainWindow = WindowClass()
 mainWindow.show()
