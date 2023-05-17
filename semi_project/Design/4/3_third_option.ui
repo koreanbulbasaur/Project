@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
+    <width>692</width>
     <height>427</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>30</x>
      <y>20</y>
-     <width>481</width>
+     <width>631</width>
      <height>301</height>
     </rect>
    </property>
@@ -87,17 +87,38 @@
      <rect>
       <x>20</x>
       <y>190</y>
-      <width>451</width>
+      <width>471</width>
       <height>31</height>
      </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_file">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>180</y>
+      <width>121</width>
+      <height>46</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>파일추가</string>
     </property>
    </widget>
   </widget>
   <widget class="QPushButton" name="complete_btn">
    <property name="geometry">
     <rect>
-     <x>420</x>
-     <y>340</y>
+     <x>570</x>
+     <y>330</y>
      <width>93</width>
      <height>51</height>
     </rect>

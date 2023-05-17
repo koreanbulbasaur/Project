@@ -14,6 +14,7 @@ from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
 from time import *
 from ssl import Options
+import requests
 
 matplotlib.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.rcParams['font.size'] = 15 # 글자크기
@@ -160,6 +161,8 @@ class ThirdOption(QDialog):
         self.df_option = self.parent().df_option
 
         self.complete_btn.clicked.connect(self.create_graph)
+        self.btn_file.clicked.connect(self.openfile)
+
         self.mean_radio.toggled.connect(self.mean_radio_clicked)
         self.sum_radio.toggled.connect(self.sum_radio_clicked)
         self.another_radio.toggled.connect(self.radioButton_clicked)
@@ -176,28 +179,34 @@ class ThirdOption(QDialog):
             self.create_bar_graph(df)
             self.reject()
         elif self.another_radio.isChecked():
-            link = self.another_text.text()
-            if link != None:
-                df_denominator = self.Sum_Df(self.df_option)
-                df_numerator = self.Get_Df(link)
-                df = self.Div_Df(df_denominator, df_numerator)
-                self.create_bar_graph(df)
-                self.reject()
+            another_data = self.another_text.text()
+            if another_data != None:
+                if another_data.startswith('http://') or another_data.startswith('https://'):
+                    df_denominator = self.Sum_Df(self.df_option)
+                    df_numerator = self.Get_Df(another_data)
+                    df = self.Div_Df(df_denominator, df_numerator)
+                    self.create_bar_graph(df)
+                    self.reject()
+                elif another_data.endswith('.xlsx'):
+                    pass
+                else:
+                    QMessageBox.warning(self, '뭔 파일이여', '지원하지 않는 파일 형식입니다.')
+
         else:
-            QMessageBox.warning(self, 'link 없음', 'url을 넣어주세요')
+            QMessageBox.warning(self, '비교 데이터가 없음', '비교 데이터를 넣어주세요')
 
     def Sum_Df(self, df):
         df_sum = df.sum(axis=1)
         df_sum = pd.DataFrame(df_sum, columns=['합계'])
         df_sum.index.name = df.index.name
         return df_sum
-    
+
     def Mean_Df(self):
         df_mean = self.df_option.mean(axis=1)
         df_mean = pd.DataFrame(df_mean, columns=['평균'])
         df_mean.index.name = self.df_option.index.name
         return df_mean
-    
+
     def Div_Df(self, df1, df2):
         text_col = '계산'
 
@@ -211,20 +220,30 @@ class ThirdOption(QDialog):
 
         df3 = df2 / df1
         return df3
+    
+    def openfile(self):
+        filename = QFileDialog.getOpenFileName(self)
+        if filename[0]:
+            self.another_text.setText(filename[0])
+            return filename[0]
 
     def mean_radio_clicked(self):
         if self.another_text.isEnabled():
             self.another_text.setDisabled(True)
+            self.btn_file.setDisabled(True)
 
     def sum_radio_clicked(self):
         if self.another_text.isEnabled():
             self.another_text.setDisabled(True)
+            self.btn_file.setDisabled(True)
 
     def radioButton_clicked(self):
         if self.another_radio.isEnabled():
             self.another_text.setEnabled(True)
+            self.btn_file.setEnabled(True)
         else:
             self.another_text.setDisabled(True)
+            self.btn_file.setDisabled(True)
 
     def create_bar_graph(self, df):
         # print(df)
