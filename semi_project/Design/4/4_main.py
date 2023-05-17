@@ -81,7 +81,6 @@ class SecondOption(QDialog):
         if data.endswith('.csv'):
             self.df = pd.read_csv(data)
         elif data.endswith('.xlsx'):
-            # print(self.header_Index)
             self.df = pd.read_excel(data, index_col=self.index_Col, header=self.header_Index)
 
         row_count = len(self.df) + 1
@@ -99,12 +98,12 @@ class SecondOption(QDialog):
                 elif row == 0:
                     item = QTableWidgetItem(str(self.df.columns[col-1]))
                     item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
-                    item.setCheckState(Qt.CheckState.Unchecked)
+                    item.setCheckState(Qt.CheckState.Checked)
                     self.table.setItem(row, col, item)
                 elif col == 0:
                     item = QTableWidgetItem(str(self.df.index[row-1]))
                     item.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
-                    item.setCheckState(Qt.CheckState.Unchecked)
+                    item.setCheckState(Qt.CheckState.Checked)
                     self.table.setItem(row, col, item)
                 else:
                     self.df.index = self.df.index.astype('object')
@@ -131,12 +130,10 @@ class SecondOption(QDialog):
         if row_index != 0 and col_index != 0:
             for row in range(self.table.rowCount()):
                 if self.table.item(row, 0).checkState() == Qt.CheckState.Checked:
-                    # print(self.table.item(row, 0).text())
                     row_list.append(row-1)
 
             for col in range(self.table.columnCount()):
                 if self.table.item(0, col).checkState() == Qt.CheckState.Checked:
-                    # print(self.table.item(row, 0).text())
                     col_list.append(col-1)
 
             self.df_option = self.df.iloc[row_list, col_list]
@@ -146,34 +143,57 @@ class SecondOption(QDialog):
         else:
             pass
 
-        print('-'*100)
-        print(row_index, col_index)
-        print(row_list)
-        print(col_list)
-
 class ThirdOption(QDialog):
     def __init__(self, parent):
         super(ThirdOption, self).__init__(parent)
         uic.loadUi(r'semi_project\Design\4\3_third_option.ui', self)
 
-        self.complete_btn.clicked.connect(self.create_graph)
-
-        self.another_radio.clicked.connect(self.radioButton_clicked)
-
         self.df_option = self.parent().df_option
+
+        self.complete_btn.clicked.connect(self.create_graph)
+        self.mean_radio.toggled.connect(self.mean_radio_clicked)
+        self.sum_radio.toggled.connect(self.sum_radio_clicked)
+        self.another_radio.toggled.connect(self.radioButton_clicked)
 
         self.show()
 
     def create_graph(self):
+        # self.plot_graph()
 
+        if self.mean_radio.isChecked():
+            pass
+        elif self.sum_radio.isChecked():
+            print('sum_radio_checked')
+            df = self.Sum_Df()
+            self.plot_graph(df)
+        elif self.another_radio.isChecked():
+            pass
+        else:
+            pass
         self.reject()
-        self.plot_graph()
+
+
+    def Sum_Df(self):
+        df_sum = self.df_option.sum(axis=1)
+        df_sum['합계'] = df_sum.sum()
+        print(df_sum)
+        return df_sum
+
+    def mean_radio_clicked(self):
+        if self.another_text.isEnabled():
+            self.another_text.setDisabled(True)
+
+    def sum_radio_clicked(self):
+        if self.another_text.isEnabled():
+            self.another_text.setDisabled(True)
 
     def radioButton_clicked(self):
-        if self.another_radio.isChecked():
-            pass
+        if self.another_radio.isEnabled():
+            self.another_text.setEnabled(True)
+        else:
+            self.another_text.setDisabled(True)
 
-    def plot_graph(self):
+    def plot_graph(self, df):
         print(self.df_option)
         matplotlib.rcParams['font.family'] = 'Malgun Gothic'
         matplotlib.rcParams['font.size'] = 15 # 글자크기
@@ -196,7 +216,6 @@ class ThirdOption(QDialog):
                     b = x - int(statistics.median(index_list))
                     w_value = b * w
                     plt.bar(index + w_value, self.df_option[col], width=w)
-                print(w_value)
             plt.legend()
             plt.xticks(index + w/2, self.df_option.index)
             plt.show()
@@ -214,7 +233,6 @@ class ThirdOption(QDialog):
                     b = x - int(statistics.median(index_list))
                     w_value = b * w
                     plt.bar(index + w_value, self.df_option[col], width=w)
-                print(w_value)
             plt.legend()
             plt.xticks(index, self.df_option.index)
             plt.show()

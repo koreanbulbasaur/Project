@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>721</width>
-    <height>296</height>
+    <height>232</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,6 +27,23 @@
     <property name="bottomMargin">
      <number>30</number>
     </property>
+    <item row="1" column="0">
+     <widget class="QGroupBox" name="groupBox">
+      <property name="title">
+       <string>파일</string>
+      </property>
+      <widget class="QPlainTextEdit" name="text_file">
+       <property name="geometry">
+        <rect>
+         <x>3</x>
+         <y>20</y>
+         <width>701</width>
+         <height>31</height>
+        </rect>
+       </property>
+      </widget>
+     </widget>
+    </item>
     <item row="0" column="0">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -81,40 +98,6 @@
        </widget>
       </item>
      </layout>
-    </item>
-    <item row="1" column="0">
-     <widget class="QGroupBox" name="groupBox">
-      <property name="title">
-       <string>파일</string>
-      </property>
-      <widget class="QPlainTextEdit" name="text_file">
-       <property name="geometry">
-        <rect>
-         <x>3</x>
-         <y>20</y>
-         <width>701</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-     </widget>
-    </item>
-    <item row="2" column="0">
-     <widget class="QGroupBox" name="groupBox_2">
-      <property name="title">
-       <string>링크</string>
-      </property>
-      <widget class="QPlainTextEdit" name="link_file">
-       <property name="geometry">
-        <rect>
-         <x>3</x>
-         <y>20</y>
-         <width>701</width>
-         <height>31</height>
-        </rect>
-       </property>
-      </widget>
-     </widget>
     </item>
    </layout>
   </widget>
