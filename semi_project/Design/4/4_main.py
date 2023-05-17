@@ -41,7 +41,7 @@ class WindowClass(QMainWindow, form_class):
 
     def createGraph(self):
         if self.file_name == None:
-            pass
+            QMessageBox.warning(self, 'file 이름 없음', 'file을 추가해주세요')
         else:
             FirstOption(self)
 
@@ -67,6 +67,8 @@ class FirstOption(QDialog):
         if index_Col != '' and header_Index != '':
             self.reject()
             SecondOption(self.parent(), data, header_Index, index_Col)
+        else:
+            QMessageBox.warning(self, '값 없음', '값을 입력해주세요')
 
 class SecondOption(QDialog):
     def __init__(self, parent, data, header_Index, index_Col):
@@ -147,7 +149,8 @@ class SecondOption(QDialog):
             self.reject()
             ThirdOption(self)
         else:
-            pass
+            QMessageBox.warning(self, '못 넘어감', '체크 해주세요')
+
 
 class ThirdOption(QDialog):
     def __init__(self, parent):
@@ -181,7 +184,7 @@ class ThirdOption(QDialog):
                 self.create_bar_graph(df)
                 self.reject()
         else:
-            pass
+            QMessageBox.warning(self, 'link 없음', 'url을 넣어주세요')
 
     def Sum_Df(self, df):
         df_sum = df.sum(axis=1)
