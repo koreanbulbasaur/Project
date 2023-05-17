@@ -1,4 +1,4 @@
-import sys
+'''import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QRadioButton, QVBoxLayout
 
 
@@ -36,4 +36,16 @@ if __name__ == "__main__":
     app = QApplication(sys.argv)
     widget = MyWidget()
     widget.show()
-    sys.exit(app.exec())
+    sys.exit(app.exec())'''
+
+
+import pandas as pd
+
+df = pd.DataFrame({'A': [1, 2, 3], 'B': [4, 5, 6], 'C': [7, 8, 9]})
+
+# 모든 열 출력
+print(df.columns)
+
+# 각 열을 순회하며 출력
+for column in df.columns:
+    print(column)

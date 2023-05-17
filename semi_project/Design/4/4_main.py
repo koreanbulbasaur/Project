@@ -163,9 +163,8 @@ class ThirdOption(QDialog):
         if self.mean_radio.isChecked():
             pass
         elif self.sum_radio.isChecked():
-            print('sum_radio_checked')
             df = self.Sum_Df()
-            self.plot_graph(df)
+            self.create_bar_graph(df)
         elif self.another_radio.isChecked():
             pass
         else:
@@ -175,7 +174,8 @@ class ThirdOption(QDialog):
 
     def Sum_Df(self):
         df_sum = self.df_option.sum(axis=1)
-        df_sum['합계'] = df_sum.sum()
+        df_sum = pd.DataFrame(df_sum, columns=['합계'])
+        df_sum.index.name = self.df_option.index.name
         print(df_sum)
         return df_sum
 
@@ -193,7 +193,51 @@ class ThirdOption(QDialog):
         else:
             self.another_text.setDisabled(True)
 
-    def plot_graph(self, df):
+    def create_bar_graph(self, df):
+        print(df)
+        matplotlib.rcParams['font.family'] = 'Malgun Gothic'
+        matplotlib.rcParams['font.size'] = 15 # 글자크기
+        matplotlib.rcParams['axes.unicode_minus']=False
+
+        N = df.shape[0]
+        index = np.arange(N) * 5
+        index_list = list(range(1, len(df.columns) + 1))
+
+        w = 0.45
+
+        if len(df.columns) % 2 == 0:
+            for col, x in zip(df.columns, index_list):
+                w_value = None
+                if statistics.median(index_list) > x:
+                    a = int(statistics.median(index_list)) - x + 1
+                    w_value = -(a * w)
+                    plt.bar(index + w_value, df[col], width=w)
+                else:
+                    b = x - int(statistics.median(index_list))
+                    w_value = b * w
+                    plt.bar(index + w_value, df[col], width=w)
+            plt.legend()
+            plt.xticks(index + w/2, df.index)
+            plt.show()
+        else:
+            for col, x in zip(df.columns, index_list):
+                w_value = None
+                if statistics.median(index_list) > x:
+                    a = int(statistics.median(index_list)) - x
+                    w_value = -(a * w)
+                    plt.bar(index + w_value, df[col], width=w)
+                elif x == statistics.median(index_list):
+                    w_value = 0
+                    plt.bar(index + w_value, df[col], width=w)
+                else:
+                    b = x - int(statistics.median(index_list))
+                    w_value = b * w
+                    plt.bar(index + w_value, df[col], width=w)
+            plt.legend()
+            plt.xticks(index, df.index)
+            plt.show()
+
+    def plot_graph(self):
         print(self.df_option)
         matplotlib.rcParams['font.family'] = 'Malgun Gothic'
         matplotlib.rcParams['font.size'] = 15 # 글자크기
