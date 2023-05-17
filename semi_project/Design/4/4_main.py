@@ -260,6 +260,7 @@ class ThirdOption(QDialog):
         index_list = list(range(1, len(df.columns) + 1))
 
         w = 0.45
+        w = 1
         rotation = 30
 
         if len(df.columns) % 2 == 0:
