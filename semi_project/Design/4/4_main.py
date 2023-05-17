@@ -369,7 +369,7 @@ class ThirdOption(QDialog):
     def Get_Df_xlsx(self, link):
         df = pd.read_excel(link, index_col=0)
         return df
-    
+
 app = QApplication(sys.argv)
 mainWindow = WindowClass()
 mainWindow.show()
