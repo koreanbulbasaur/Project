@@ -1,13 +1,19 @@
 import sys
-from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtCore
 import matplotlib
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from PyQt5.QtWidgets import QTableWidgetItem, QAbstractItemView
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import *
+from PyQt5 import uic, QtCore
 import statistics
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+from bs4 import BeautifulSoup
+from time import *
+from ssl import Options
 
 matplotlib.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.rcParams['font.size'] = 15 # 글자크기
@@ -159,23 +165,40 @@ class ThirdOption(QDialog):
 
     def create_graph(self):
         if self.mean_radio.isChecked():
-            pass
+            df = self.Mean_Df()
+            self.create_bar_graph(df)
         elif self.sum_radio.isChecked():
             df = self.Sum_Df()
             self.create_bar_graph(df)
         elif self.another_radio.isChecked():
-            pass
+            df_denominator = self.Sum_Df(self.df_option)
+            df_numerator = self.Get_Df()
+            df = self.Div_Df(df_denominator, df_numerator)
+            self.create_bar_graph(df)
         else:
             pass
         self.reject()
 
-
-    def Sum_Df(self):
-        df_sum = self.df_option.sum(axis=1)
+    def Sum_Df(self, df):
+        df_sum = df.sum(axis=1)
         df_sum = pd.DataFrame(df_sum, columns=['합계'])
-        df_sum.index.name = self.df_option.index.name
+        df_sum.index.name = df.index.name
         print(df_sum)
         return df_sum
+    
+    def Mean_Df(self):
+        df_mean = self.df_option.mean(axis=1)
+        df_mean = pd.DataFrame(df_mean, columns=['평균'])
+        df_mean.index.name = self.df_option.index.name
+        print(df_mean)
+        # return df_mean
+    
+    def Div_Df(self, df1, df2):
+        df1.columns = ['계산']
+        df2.columns = ['계산']
+        df3 = df2 / df1
+        print(df3)
+        return df3
 
     def mean_radio_clicked(self):
         if self.another_text.isEnabled():
@@ -202,6 +225,7 @@ class ThirdOption(QDialog):
         index_list = list(range(1, len(df.columns) + 1))
 
         w = 0.45
+        rotation = 30
 
         if len(df.columns) % 2 == 0:
             for col, x in zip(df.columns, index_list):
@@ -215,7 +239,8 @@ class ThirdOption(QDialog):
                     w_value = b * w
                     plt.bar(index + w_value, df[col], width=w)
             plt.legend()
-            plt.xticks(index + w/2, df.index)
+            plt.xticks(index + w/2, df.index, rotation=rotation)
+            plt.tight_layout()
             plt.show()
         else:
             for col, x in zip(df.columns, index_list):
@@ -232,8 +257,77 @@ class ThirdOption(QDialog):
                     w_value = b * w
                     plt.bar(index + w_value, df[col], width=w)
             plt.legend()
-            plt.xticks(index, df.index)
+            plt.xticks(index, df.index, rotation=rotation)
+            plt.tight_layout()
             plt.show()
+
+    def Get_Df(self):
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless=new")
+        options.add_argument("window-size=1920x1080")
+
+        browser = webdriver.Chrome(options=options)
+        browser.maximize_window()
+        url = 'https://jumin.mois.go.kr/'
+
+        sleep(1)
+        browser.get(url)
+
+        iframe = browser.find_element(By.TAG_NAME, "iframe")
+        browser.switch_to.default_content()
+        browser.switch_to.frame(iframe)
+
+        iframe_source = browser.page_source
+
+        soup = BeautifulSoup(iframe_source, features="html.parser")
+
+
+        def select_option(InputValue1, InputValue2):
+            select_element = Select(browser.find_element(By.ID, InputValue1))
+            options = select_element.options
+
+            for option in options:
+                if option.get_attribute("value") == InputValue2:
+                    option.click()
+                break
+
+
+        select_option("searchYearStart", "2022")
+        select_option("searchMonthStart","12")
+        select_option("searchYearEnd","2022")
+        select_option("searchMonthEnd","12")
+
+        button_element = browser.find_element(By.CLASS_NAME,'btn_search')
+        button_element.click()
+
+        series = []
+        cols = []
+
+        tmp = soup.find('div',class_='dataTables_scrollBody').find('tbody')
+        for i in tmp.findAll('tr'):
+            tmplist = []
+            tmplist.append(i.find('td',class_='td_admin th1').get_text())
+        for j in i.findAll('td',class_=''):
+            readData = j.get_text().replace(" ", "")
+            tmplist.append(readData.replace(",", ""))
+            series.append(tmplist)
+
+        for i in soup.findAll('div',class_='dataTables_sizing'):
+            cols.append(i.get_text().replace(" ", ""))
+
+        del cols[0]
+        del cols[1]
+
+        df = pd.DataFrame(series)
+        df.columns = cols
+
+        df = df.set_index('행정기관')
+        df_Edit = df.loc[:,['총인구수']]
+
+        df_Edit['총인구수'] = df_Edit['총인구수'].astype('int')
+
+        browser.quit()
+        return df_Edit
 
 app = QApplication(sys.argv)
 mainWindow = WindowClass()
