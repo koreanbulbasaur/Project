@@ -12,7 +12,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from bs4 import BeautifulSoup
-from time import *
+import time
 from ssl import Options
 import requests
 
@@ -188,16 +188,26 @@ class ThirdOption(QDialog):
                     self.create_bar_graph(df)
                     self.reject()
                 elif another_data.endswith('.xlsx'):
+                    self.progress_loading(0, '시작')
                     df_denominator = self.Sum_Df(self.df_option)
+                    self.progress_loading(25, '첫 번째 데이터 작업')
                     df_numerator = self.Get_Df_xlsx(another_data)
+                    self.progress_loading(50, '두 번째 데이터 작업')
                     df = self.Div_Df(df_denominator, df_numerator)
+                    self.progress_loading(75, '데이터들을 비교하고 있어요')
                     self.create_bar_graph(df)
+                    self.progress_loading(100, '그래프 만드는 중')
+                    time.sleep(2)
                     self.reject()
                 else:
                     QMessageBox.warning(self, '뭔 파일이여', '지원하지 않는 파일 형식입니다.')
 
         else:
             QMessageBox.warning(self, '비교 데이터가 없음', '비교 데이터를 넣어주세요')
+
+    def progress_loading(self, i=0, text=None):
+        self.progressBar.setValue(i)
+        self.progressLabel.setText(text)
 
     def Sum_Df(self, df):
         df_sum = df.sum(axis=1)
@@ -297,7 +307,7 @@ class ThirdOption(QDialog):
             plt.tight_layout()
             plt.show()
 
-    def Get_Df_url(self, link):
+    def Get_Df_popular_url(self, link):
         options = webdriver.ChromeOptions()
         options.add_argument("--headless=new")
         options.add_argument("window-size=1920x1080")
@@ -307,7 +317,7 @@ class ThirdOption(QDialog):
         # url = 'https://jumin.mois.go.kr/'
         url = link
 
-        sleep(1)
+        time.sleep(1)
         browser.get(url)
 
         iframe = browser.find_element(By.TAG_NAME, "iframe")
@@ -362,14 +372,55 @@ class ThirdOption(QDialog):
 
         df_Edit['총인구수'] = df_Edit['총인구수'].astype('int')
         df_delete = df_Edit.drop(df_Edit.index[0])
-        print(df_delete)
         df_delete.to_excel('sample.xlsx')
         browser.quit()
         return df_delete
+    
+    def Get_Df_url(self, link):
+        options = webdriver.ChromeOptions()
+        options.add_argument("--headless=new")
+        options.add_argument("window-size=1920x1080")
 
-    def Get_Df_xlsx(self, link):
-        df = pd.read_excel(link, index_col=0)
-        return df
+        browser = webdriver.Chrome(options=options)
+        browser.maximize_window()
+        url = 'https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1YL21291E&conn_path=I2'
+
+        browser.get(url)
+
+        time.sleep(5)
+
+        iframes = browser.find_elements(By.TAG_NAME,"iframe")
+        browser.switch_to.frame(iframes[1])
+
+        iframes2 = browser.find_element(By.TAG_NAME,"iframe") 
+        browser.switch_to.frame(iframes2)
+
+        iframe_source = browser.page_source
+        soup = BeautifulSoup(iframe_source ,features="html.parser")
+
+        Series = []
+        listCols = ["소재지(시군구)별"]
+        find_Table = soup.find('table',class_='fontL')
+        for i in find_Table.findAll('th',class_='colHead-first'):
+            listCols.append(i['title'])
+
+        Table_Body = find_Table.find('tbody')
+
+        for i in Table_Body.findAll('tr'):
+            tmp = []
+            for j in i.findAll('td'):
+                tmp.append(j['title'].replace(",", ""))
+            Series.append(tmp)
+
+        Edit_df = pd.DataFrame(Series)
+        Edit_df.columns = listCols
+        Edit_df.set_index("소재지(시군구)별",inplace= True)
+        Edit_df.drop(['전국'],inplace=True)
+        Edit_df[['2019','2020','2021']] = Edit_df[['2019','2020','2021']].astype('Int64') 
+
+        df_delete = Edit_df.drop(['2019', '2020'], axis=1)
+        browser.quit()
+        return df_delete
 
 app = QApplication(sys.argv)
 mainWindow = WindowClass()
