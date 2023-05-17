@@ -233,7 +233,8 @@ class ThirdOption(QDialog):
         df1 = df1.reindex(df2.index)
 
         df3 = df2 / df1
-        return df3
+        df_sorted = df3.sort_values(by='계산')
+        return df_sorted
     
     def openfile(self):
         filename = QFileDialog.getOpenFileName(self)
