@@ -6,13 +6,11 @@ from time import *
 import pandas as pd
 from ssl import Options
 
-
 options = webdriver.ChromeOptions()
 options.add_argument("--headless=new")
 options.add_argument("window-size=1920x1080")
 
 browser = webdriver.Chrome(options=options)
-# browser = webdriver.Chrome()
 browser.maximize_window()
 url = 'https://jumin.mois.go.kr/'
 

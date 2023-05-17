@@ -41,7 +41,7 @@ class WindowClass(QMainWindow, form_class):
 
     def createGraph(self):
         if self.file_name == None:
-            return
+            pass
         else:
             FirstOption(self)
 
@@ -167,37 +167,46 @@ class ThirdOption(QDialog):
         if self.mean_radio.isChecked():
             df = self.Mean_Df()
             self.create_bar_graph(df)
+            self.reject()
         elif self.sum_radio.isChecked():
             df = self.Sum_Df()
             self.create_bar_graph(df)
+            self.reject()
         elif self.another_radio.isChecked():
-            df_denominator = self.Sum_Df(self.df_option)
-            df_numerator = self.Get_Df()
-            df = self.Div_Df(df_denominator, df_numerator)
-            self.create_bar_graph(df)
+            link = self.another_text.text()
+            if link != None:
+                df_denominator = self.Sum_Df(self.df_option)
+                df_numerator = self.Get_Df(link)
+                df = self.Div_Df(df_denominator, df_numerator)
+                self.create_bar_graph(df)
+                self.reject()
         else:
             pass
-        self.reject()
 
     def Sum_Df(self, df):
         df_sum = df.sum(axis=1)
         df_sum = pd.DataFrame(df_sum, columns=['합계'])
         df_sum.index.name = df.index.name
-        print(df_sum)
         return df_sum
     
     def Mean_Df(self):
         df_mean = self.df_option.mean(axis=1)
         df_mean = pd.DataFrame(df_mean, columns=['평균'])
         df_mean.index.name = self.df_option.index.name
-        print(df_mean)
-        # return df_mean
+        return df_mean
     
     def Div_Df(self, df1, df2):
-        df1.columns = ['계산']
-        df2.columns = ['계산']
+        text_col = '계산'
+
+        df1 = df1.astype(float)
+        df2 = df2.astype(float)
+
+        df1.columns = [text_col]
+        df2.columns = [text_col]
+
+        df1 = df1.reindex(df2.index)
+
         df3 = df2 / df1
-        print(df3)
         return df3
 
     def mean_radio_clicked(self):
@@ -215,7 +224,7 @@ class ThirdOption(QDialog):
             self.another_text.setDisabled(True)
 
     def create_bar_graph(self, df):
-        print(df)
+        # print(df)
         matplotlib.rcParams['font.family'] = 'Malgun Gothic'
         matplotlib.rcParams['font.size'] = 15 # 글자크기
         matplotlib.rcParams['axes.unicode_minus']=False
@@ -261,14 +270,15 @@ class ThirdOption(QDialog):
             plt.tight_layout()
             plt.show()
 
-    def Get_Df(self):
+    def Get_Df(self, link):
         options = webdriver.ChromeOptions()
         options.add_argument("--headless=new")
         options.add_argument("window-size=1920x1080")
 
         browser = webdriver.Chrome(options=options)
         browser.maximize_window()
-        url = 'https://jumin.mois.go.kr/'
+        # url = 'https://jumin.mois.go.kr/'
+        url = link
 
         sleep(1)
         browser.get(url)
@@ -289,8 +299,7 @@ class ThirdOption(QDialog):
             for option in options:
                 if option.get_attribute("value") == InputValue2:
                     option.click()
-                break
-
+                    break
 
         select_option("searchYearStart", "2022")
         select_option("searchMonthStart","12")
@@ -307,9 +316,9 @@ class ThirdOption(QDialog):
         for i in tmp.findAll('tr'):
             tmplist = []
             tmplist.append(i.find('td',class_='td_admin th1').get_text())
-        for j in i.findAll('td',class_=''):
-            readData = j.get_text().replace(" ", "")
-            tmplist.append(readData.replace(",", ""))
+            for j in i.findAll('td',class_=''):
+                readData = j.get_text().replace(" ", "")
+                tmplist.append(readData.replace(",", ""))
             series.append(tmplist)
 
         for i in soup.findAll('div',class_='dataTables_sizing'):
@@ -318,16 +327,18 @@ class ThirdOption(QDialog):
         del cols[0]
         del cols[1]
 
-        df = pd.DataFrame(series)
-        df.columns = cols
+        df_get = pd.DataFrame(series)
+        df_get.columns = cols
 
-        df = df.set_index('행정기관')
-        df_Edit = df.loc[:,['총인구수']]
+        df_get = df_get.set_index('행정기관')
+        df_Edit = df_get.loc[:,['총인구수']]
 
         df_Edit['총인구수'] = df_Edit['총인구수'].astype('int')
-
+        df_delete = df_Edit.drop(df_Edit.index[0])
+        print(df_delete)
+        df_delete.to_excel('sample.xlsx')
         browser.quit()
-        return df_Edit
+        return df_delete
 
 app = QApplication(sys.argv)
 mainWindow = WindowClass()
