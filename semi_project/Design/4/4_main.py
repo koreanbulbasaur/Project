@@ -272,7 +272,6 @@ class ThirdOption(QDialog):
             self.btn_file.setDisabled(True)
 
     def create_bar_graph(self, df):
-        # print(df)
         matplotlib.rcParams['font.family'] = 'Malgun Gothic'
         matplotlib.rcParams['font.size'] = 15 # 글자크기
         matplotlib.rcParams['axes.unicode_minus']=False
