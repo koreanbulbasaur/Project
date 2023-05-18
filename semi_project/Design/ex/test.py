@@ -1,141 +1,51 @@
-import sys
-from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtCore
-import matplotlib
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+from bs4 import BeautifulSoup
+import time
 import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-from PyQt5.QtWidgets import QTableWidgetItem, QAbstractItemView
-from PyQt5.QtCore import Qt
-
-matplotlib.rcParams['font.family'] = 'Malgun Gothic'
-matplotlib.rcParams['font.size'] = 15 # 글자크기
-matplotlib.rcParams['axes.unicode_minus']=False
-
-form_class = uic.loadUiType(r'C:\Project\semi_project\Design\2_Main.ui')[0]
+from ssl import Options
 
 
-class WindowClass(QMainWindow, form_class):
-    def __init__(self):
-        super().__init__()
-        self.setupUi(self)
+options = webdriver.ChromeOptions()
+options.add_argument("--headless=new")
+options.add_argument("window-size=1920x1080")
 
-        self.open_btn.clicked.connect(self.openFunction)
-        self.graph_btn.clicked.connect(self.createGraph)
+browser = webdriver.Chrome(options=options)
+browser.maximize_window()
+rl = 'https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1YL21291E&conn_path=I2'
 
-        self.file_name = None
+browser.get(rl)
 
+time.sleep(5)
 
-    def openFunction(self):
-        fname = QFileDialog.getOpenFileName(self)
-        if fname[0]:
-            self.text_file.setPlainText(fname[0])
-            self.file_name = fname[0]
+iframes = browser.find_elements(By.TAG_NAME,"iframe")
+browser.switch_to.frame(iframes[1])
 
-    def createGraph(self):
-        if self.file_name == None:
-            return
-        else:
-            FirstOption(self)
+iframes2 = browser.find_element(By.TAG_NAME,"iframe") 
+browser.switch_to.frame(iframes2)
 
+iframe_source = browser.page_source
+soup = BeautifulSoup(iframe_source)
 
-class FirstOption(QDialog):
-    def __init__(self, parent):
-        super(FirstOption, self).__init__(parent)
-        uic.loadUi(r'C:\Project\semi_project\Design\2_first_option.ui', self)
+Series = []
+listCols = ["소재지(시군구)별"]
+find_Table = soup.find('table',class_='fontL')
+for i in find_Table.findAll('th',class_='colHead-first'):
+    listCols.append(i['title'])
 
-        self.header_Index = None
-        self.index_Col = None
+Table_Body = find_Table.find('tbody')
 
-        self.first_next_btn.clicked.connect(self.secondwindow)
+for i in Table_Body.findAll('tr'):
+    tmp = []
+    for j in i.findAll('td'):
+        tmp.append(j['title'].replace(",", ""))
+    Series.append(tmp)
 
-        self.show()
+Edit_df = pd.DataFrame(Series)
+Edit_df.columns = listCols
+Edit_df.set_index("소재지(시군구)별",inplace= True)
+Edit_df.drop(['전국'],inplace=True)
+Edit_df[['2019','2020','2021']] = Edit_df[['2019','2020','2021']].astype('Int64') 
 
-    def secondwindow(self):
-        header_Index = self.Index_Row.text()
-        index_Col = self.Index_Column.text()
-
-        data = self.parent().file_name
-
-        self.reject()
-        SecondOption(self.parent(), data, header_Index, index_Col)
-
-class SecondOption(QDialog):
-    def __init__(self, parent, data, header_Index, index_Col):
-        super(SecondOption, self).__init__(parent)
-        uic.loadUi(r'C:\Project\semi_project\Design\2_second_option.ui', self)
-
-        self.firsttable = self.first_table
-        self.secondtable = self.second_table
-
-        self.second_next_btn.clicked.connect(self.thirdwindow)
-        self.T_btn.clicked.connect(self.retrieveCheckboxValues)
-
-        self.header_Index = int(header_Index)
-        self.index_Col = index_Col
-
-        self.data = data
-
-        if data.endswith('.csv'):
-            self.df = pd.read_csv(data)
-        elif data.endswith('.xlsx'):
-            # print(self.header_Index)
-            self.df = pd.read_excel(data, index_col=self.header_Index)
-
-        self.firsttable.setRowCount(len(self.df))
-        self.firsttable.setColumnCount(1)
-        self.firsttable.setHorizontalHeaderLabels([self.df.index.name])
-
-        for row in range(len(self.df)):
-            self.df.index = self.df.index.astype('object')
-            item = QTableWidgetItem(str(self.df.index[row]))
-            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable |Qt.ItemFlag.ItemIsEnabled)
-            item.setCheckState(Qt.CheckState.Unchecked)
-            self.firsttable.setItem(row, 0, item)
-
-        self.secondtable.setRowCount(len(self.df.columns))
-        self.secondtable.setColumnCount(1)
-        self.secondtable.setHorizontalHeaderLabels(['열'])
-
-        for col in range(len(self.df.columns)):
-            item = QTableWidgetItem(str(self.df.columns[col]))
-            item.setFlags(Qt.ItemFlag.ItemIsUserCheckable |Qt.ItemFlag.ItemIsEnabled)
-            item.setCheckState(Qt.CheckState.Unchecked)
-            self.secondtable.setItem(col, 0, item)
-
-        self.show()
-
-    def thirdwindow(self):
-        self.reject()
-        ThirdOption(self, self.df)
-
-    def retrieveCheckboxValues(self):
-        for row in range(self.firsttable.rowCount()):
-            if self.firsttable.item(row, 0).checkState() == Qt.CheckState.Checked:
-                print([self.firsttable.item(row, col).text() for col in range(self.firsttable.columnCount())])
-        print('-'*100)
-
-class ThirdOption(QDialog):
-    def __init__(self, parent, df):
-        super(ThirdOption, self).__init__(parent)
-        uic.loadUi(r'C:\Project\semi_project\Design\2_third_option.ui', self)
-
-        self.df = df
-
-        self.complete_btn.clicked.connect(self.create_graph)
-
-        self.show()
-
-    def create_graph(self):
-        row = self.tableWidget.currentRow()
-        col = self.tableWidget.currentColumn()
-        value = self.df.iloc[row, col]
-        # value 값을 이용하여 차트 그리기
-        self.reject()
-
-
-app = QApplication(sys.argv)
-mainWindow = WindowClass()
-mainWindow.show()
-
-app.exec_()
+print(Edit_df)

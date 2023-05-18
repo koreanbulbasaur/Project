@@ -15,12 +15,21 @@ from bs4 import BeautifulSoup
 import time
 from ssl import Options
 import requests
+import os
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 matplotlib.rcParams['font.family'] = 'Malgun Gothic'
 matplotlib.rcParams['font.size'] = 15 # 글자크기
 matplotlib.rcParams['axes.unicode_minus']=False
 
-form_class = uic.loadUiType(r'semi_project\Design\4\3_Main.ui')[0]
+form_class = uic.loadUiType(resource_path(r'semi_project\Design\4\3_Main.ui'))[0]
 
 
 class WindowClass(QMainWindow, form_class):
@@ -50,7 +59,7 @@ class WindowClass(QMainWindow, form_class):
 class FirstOption(QDialog):
     def __init__(self, parent):
         super(FirstOption, self).__init__(parent)
-        uic.loadUi(r'semi_project\Design\4\3_first_option.ui', self)
+        uic.loadUi(resource_path(r'semi_project\Design\4\3_first_option.ui'), self)
 
         self.header_Index = None
         self.index_Col = None
@@ -74,7 +83,7 @@ class FirstOption(QDialog):
 class SecondOption(QDialog):
     def __init__(self, parent, data, header_Index, index_Col):
         super(SecondOption, self).__init__(parent)
-        uic.loadUi(r'semi_project\Design\4\3_second_option.ui', self)
+        uic.loadUi(resource_path(r'semi_project\Design\4\3_second_option.ui'), self)
 
         self.table = self.table
 
@@ -156,7 +165,7 @@ class SecondOption(QDialog):
 class ThirdOption(QDialog):
     def __init__(self, parent):
         super(ThirdOption, self).__init__(parent)
-        uic.loadUi(r'semi_project\Design\4\3_third_option.ui', self)
+        uic.loadUi(resource_path(r'semi_project\Design\4\3_third_option.ui'), self)
 
         self.df_option = self.parent().df_option
 

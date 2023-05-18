@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>692</width>
-    <height>427</height>
+    <width>688</width>
+    <height>460</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -118,7 +118,7 @@
    <property name="geometry">
     <rect>
      <x>570</x>
-     <y>330</y>
+     <y>390</y>
      <width>93</width>
      <height>51</height>
     </rect>
@@ -130,6 +130,50 @@
    </property>
    <property name="text">
     <string>완료</string>
+   </property>
+  </widget>
+  <widget class="QProgressBar" name="progressBar">
+   <property name="geometry">
+    <rect>
+     <x>27</x>
+     <y>330</y>
+     <width>631</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>100</number>
+   </property>
+   <property name="value">
+    <number>0</number>
+   </property>
+   <property name="textVisible">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="progressLabel">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>329</y>
+     <width>631</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>NanumGothic</family>
+     <pointsize>15</pointsize>
+     <weight>50</weight>
+     <bold>false</bold>
+     <strikeout>false</strikeout>
+    </font>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
    </property>
   </widget>
  </widget>
