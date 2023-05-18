@@ -210,9 +210,11 @@ class ThirdOption(QDialog):
                     self.reject()
                 else:
                     QMessageBox.warning(self, '뭔 파일이여', '지원하지 않는 파일 형식입니다.')
-
+        elif self.normal_radio.isChecked():
+            self.df_option = self.df_option.sort_values(by=self.df_option.columns[0])
+            self.create_bar_graph(self.df_option)
         else:
-            QMessageBox.warning(self, '비교 데이터가 없음', '비교 데이터를 넣어주세요')
+            QMessageBox.warning(self, '선택하지 않음', '하나를 선택해주세요.')
 
     def progress_loading(self, i=0, text=None):
         self.progressBar.setValue(i)
@@ -276,7 +278,7 @@ class ThirdOption(QDialog):
         matplotlib.rcParams['axes.unicode_minus']=False
 
         N = df.shape[0]
-        index = np.arange(N) * 5
+        index = np.arange(N) * 7
         index_list = list(range(1, len(df.columns) + 1))
 
         w = 0.45
@@ -348,9 +350,9 @@ class ThirdOption(QDialog):
                     option.click()
                     break
 
-        select_option("searchYearStart", "2022")
+        select_option("searchYearStart", "2021")
         select_option("searchMonthStart","12")
-        select_option("searchYearEnd","2022")
+        select_option("searchYearEnd","2021")
         select_option("searchMonthEnd","12")
 
         button_element = browser.find_element(By.CLASS_NAME,'btn_search')
