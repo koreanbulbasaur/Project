@@ -197,15 +197,10 @@ class ThirdOption(QDialog):
                     self.create_bar_graph(df)
                     self.reject()
                 elif another_data.endswith('.xlsx'):
-                    self.progress_loading(0, '시작')
                     df_denominator = self.Sum_Df(self.df_option)
-                    self.progress_loading(25, '첫 번째 데이터 작업')
                     df_numerator = self.Get_Df_xlsx(another_data)
-                    self.progress_loading(50, '두 번째 데이터 작업')
                     df = self.Div_Df(df_denominator, df_numerator)
-                    self.progress_loading(75, '데이터들을 비교하고 있어요')
                     self.create_bar_graph(df)
-                    self.progress_loading(100, '그래프 만드는 중')
                     time.sleep(2)
                     self.reject()
                 else:
