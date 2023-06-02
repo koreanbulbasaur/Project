@@ -47,7 +47,6 @@ def get_table(n):
                         morning = False
             else:
                 row_data.append(cell)
-        print(row_data)
         if morning:
             sheet1.append(row_data)
         else:
@@ -145,11 +144,14 @@ number = int(text.split(" / ")[1])
 table_data = []
 for n in range(1, number + 1):
     # print('n :', n)
+    if n == number:
+        break
+
     if n == 10:
         next_btn = browser.find_element(By.CSS_SELECTOR, "img[alt='다음페이지']")
         next_btn.click()
-
-    get_table(n)
+    else:
+        get_table(n)
 
     btn_list = browser.find_element(By.CLASS_NAME, 'paginate')
     a_list = btn_list.find_elements(By.CSS_SELECTOR, 'a')
