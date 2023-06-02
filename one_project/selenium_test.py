@@ -21,16 +21,38 @@ def id_click(id_value):
 
 def get_table(n):
     sleep(0.5)
-    row_data = []
     # 테이블 요소 찾기(내용)
     table = browser.find_element(By.ID, 'protable')
     row_tbody = table.find_element(By.TAG_NAME, 'tbody')
     rows = row_tbody.find_elements(By.TAG_NAME, 'tr')
     for row in rows:
+        row_data = []
+        morning = True
         cells = row.find_elements(By.TAG_NAME, 'td')
-        row_data = [cell.text for cell in cells]
-        table_data.append(row_data)
-        sheet1.append(row_data)
+        for n_index, idx in enumerate(cells):
+            cell = idx.text
+            if n_index == 0 or n_index == 7:
+                split_data = cell.split()
+                if len(split_data) == 0:
+                    pass
+                else:
+                    date_data = split_data[0]
+                    time_data = split_data[1]
+                    if time_data[:2] in ['06', '07', '08', '09']:
+                        row_data.append(date_data)
+                        row_data.append(time_data)
+                    else:
+                        row_data.append(date_data)
+                        row_data.append(time_data)
+                        morning = False
+            else:
+                row_data.append(cell)
+        print(row_data)
+        if morning:
+            sheet1.append(row_data)
+        else:
+            sheet2.append(row_data)
+    print(f'{n} page')
 
 # 새로운 워크북 생성
 workbook = Workbook()
@@ -105,6 +127,9 @@ row_thead = table.find_element(By.TAG_NAME, 'thead')
 cells = row_thead.find_elements(By.TAG_NAME, 'th')
 row_data = [cell.text for cell in cells]
 table_data_header.append(row_data)
+row_data[0] = '탑승 일시'
+row_data.insert(1, '탑승 시간')
+row_data.insert(9, '하차 시간')
 sheet1.append(row_data)
 sheet2.append(row_data)
 
@@ -119,7 +144,7 @@ number = int(text.split(" / ")[1])
 # 각 페이지 마다 테이블 내용 가져오기
 table_data = []
 for n in range(1, number + 1):
-    print('n :', n)
+    # print('n :', n)
     if n == 10:
         next_btn = browser.find_element(By.CSS_SELECTOR, "img[alt='다음페이지']")
         next_btn.click()
@@ -135,7 +160,7 @@ for n in range(1, number + 1):
             a_text = int(a_text)
 
         if a_text == n + 1 and n > 1:
-            print('클릭')
+            # print('클릭')
             a.click()
             break
 
