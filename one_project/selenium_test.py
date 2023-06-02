@@ -96,7 +96,7 @@ table_element = browser.find_element(By.CLASS_NAME, 'ui-datepicker-calendar')
 td_elements = table_element.find_elements(By.TAG_NAME, 'td')
 
 for td_element in td_elements:
-    if td_element.text == '17':
+    if td_element.text == '19':
         td_element.click()
         break
 
