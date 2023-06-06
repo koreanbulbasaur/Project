@@ -51,7 +51,7 @@ def get_table(n):
             sheet1.append(row_data)
         else:
             sheet2.append(row_data)
-    print(f'{n} page')
+    print(f'{n} page - 스크랩 완료')
 
 # 새로운 워크북 생성
 workbook = Workbook()
@@ -144,15 +144,6 @@ number = int(text.split(" / ")[1])
 table_data = []
 for n in range(1, number + 1):
     # print('n :', n)
-    if n == number:
-        break
-
-    if n == 10:
-        next_btn = browser.find_element(By.CSS_SELECTOR, "img[alt='다음페이지']")
-        next_btn.click()
-    else:
-        get_table(n)
-
     btn_list = browser.find_element(By.CLASS_NAME, 'paginate')
     a_list = btn_list.find_elements(By.CSS_SELECTOR, 'a')
     for a in a_list:
@@ -160,13 +151,20 @@ for n in range(1, number + 1):
 
         if a_text != '':
             a_text = int(a_text)
-
-        if a_text == n + 1 and n > 1:
-            # print('클릭')
+        if a_text == n and n > 1:
+            print(f'{n} 페이지 클릭')
             a.click()
             break
 
-print(table_data)
+    if n == 10:
+        get_table(n)
+        next_btn = browser.find_element(By.CSS_SELECTOR, "img[alt='다음페이지']")
+        next_btn.click()
+    elif n == number:
+        get_table(n)
+        break
+    else:
+        get_table(n)
 
 for i in range(3, 0, -1):
     print(f'{i} second')
@@ -175,4 +173,4 @@ print('End')
 
 browser.quit()
 
-workbook.save('test.xlsx')
+workbook.save('test_test.xlsx')
