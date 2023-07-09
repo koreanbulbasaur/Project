@@ -1,0 +1,3 @@
+## 폴더 무시
+alone/img_original/
+alone/img_gary/

@@ -1,0 +1,37 @@
+import base64
+import time
+import hmac
+import requests
+import pandas as pd
+import hashlib
+
+keyword = '갤럭시워치4베젤링' #키워드검색
+
+BASE_URL = 'https://api.naver.com'
+API_KEY = ''
+SECRET_KEY = ''
+CUSTOMER_ID = ''
+def generate(timestamp, method, uri, secret_key):
+    message = "{}.{}.{}".format(timestamp, method, uri)
+    #hash = hmac.new(bytes(secret_key, "utf-8"), bytes(message, "utf-8"), hashlib.sha256)
+    hash = hmac.new(secret_key.encode("utf-8"), message.encode("utf-8"), hashlib.sha256)
+    hash.hexdigest()
+    return base64.b64encode(hash.digest())
+def get_header(method, uri, api_key, secret_key, customer_id):
+    timestamp = str(int(time.time() * 1000))
+    signature = generate(timestamp, method, uri, SECRET_KEY)
+    return {'Content-Type': 'application/json; charset=UTF-8', 'X-Timestamp': timestamp, 'X-API-KEY': API_KEY, 'X-Customer': str(CUSTOMER_ID), 'X-Signature': signature}
+
+dic_return_kwd = {}
+naver_ad_url = '/keywordstool'
+#_kwds_string = '원피스' #1개일경우
+#_kwds_string = ['나이키', '원피스', '운동화'] #키워드 여러개일경우
+method = 'GET'
+prm = {'hintKeywords' : keyword , 'showDetail':1}
+#    ManageCustomerLink Usage Sample
+r = requests.get(BASE_URL + naver_ad_url, params=prm, headers=get_header(method, naver_ad_url, API_KEY, SECRET_KEY, CUSTOMER_ID))
+
+r_data = r.json()
+naver_ad_summary = pd.DataFrame(r_data['keywordList'])  
+
+naver_ad_summary[:1]   #[:1]
