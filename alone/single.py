@@ -18,9 +18,7 @@ gesture = {
     6:'', 7:'', 8:'', 9:'scissors', 10:'ok',
 }
 rps_gesture = {0:'rock', 5:'paper', 9:'scissors', 10:'ok'}
-rsp = {
-    0: 'rock', 1:'scissors', 2:'paper'
-}
+options = ["scissors", "rock", "paper"]
 
 # MediaPipe hands model
 mp_hands = mp.solutions.hands
@@ -47,7 +45,9 @@ count_start = False
 
 game_start_bool = False
 
-user_hand = None
+user_choice = None
+
+computer_choice = None
 
 def start(img):
     remaining_time = int(3 - (time.time() - start_time))
@@ -89,8 +89,23 @@ def game_count(img, start_time):
 
     return img
 
-def game_start(img, user_hand):
-    i = random.ran
+def game_start(img, user_choice, computer_choice, game_start_time):
+    if user_choice == computer_choice:
+        result = 'Tie'
+    elif (user_choice == "scissors" and computer_choice == "paper") or \
+         (user_choice == "rock" and computer_choice == "scissors") or \
+         (user_choice == "paper" and computer_choice == "rock"):
+        result = 'WIN'
+    else:
+        result = 'Lose'
+
+    cv2.putText(img, result, (int(img.shape[1]/2), int(img.shape[0]/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+
+    game_start_end_time = time.time() - game_start_time
+    if game_start_end_time <= 3:
+        return img, True, game_start_end_time
+    else:
+        return img, False, game_start_end_time
 
 while cap.isOpened():
     ret, img = cap.read()
@@ -167,16 +182,19 @@ while cap.isOpened():
     if count_start and time.time() - start_time >= 3:
         countdown = False
         img = game_count(img, start_time)
-        title_show = True
         if time.time() - start_time >= 7:
-            user_hand = gesture[idx]
+            user_choice = gesture[idx]
+            computer_choice = random.choice(options)
             game_start_bool = True
+            game_start_time = time.time()
 
     if game_start_bool:
-        print(user_hand)
-        img = game_start(img, user_hand)
-        game_start_bool = False
         count_start = False
+        print(user_choice)
+        img, _, game_start_end_time = game_start(img, user_choice, computer_choice, game_start_time)
+        if game_start_end_time >= 3.2:
+            game_start_bool = False
+            title_show = True
 
     cv2.imshow('Game', img)
     if cv2.waitKey(1) == ord('q'):
