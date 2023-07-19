@@ -18,7 +18,7 @@ gesture = {
     6:'', 7:'', 8:'', 9:'scissors', 10:'ok',
 }
 rps_gesture = {0:'rock', 5:'paper', 9:'scissors', 10:'ok'}
-options = ["scissors", "rock", "paper"]
+options = ["rock", "scissors", "paper"]
 
 # MediaPipe hands model
 mp_hands = mp.solutions.hands
@@ -92,20 +92,34 @@ def game_count(img, start_time):
 def game_start(img, user_choice, computer_choice, game_start_time):
     if user_choice == computer_choice:
         result = 'Tie'
+        color = (255, 0, 0)
+
     elif (user_choice == "scissors" and computer_choice == "paper") or \
          (user_choice == "rock" and computer_choice == "scissors") or \
          (user_choice == "paper" and computer_choice == "rock"):
         result = 'WIN'
+        color = (0, 255, 0)
+
     else:
         result = 'Lose'
+        color = bgr()
 
-    cv2.putText(img, result, (int(img.shape[1]/2), int(img.shape[0]/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 5, cv2.LINE_AA)
+    cv2.putText(img, result, (int(img.shape[1]/2), int(img.shape[0]/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 8, cv2.LINE_AA)
+    cv2.putText(img, result, (int(img.shape[1]/2), int(img.shape[0]/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, color, 5, cv2.LINE_AA)
+    cv2.putText(img, f'computer : {computer_choice}', (0, 400), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 0, 0), 8, cv2.LINE_AA)
+    cv2.putText(img, f'computer : {computer_choice}', (0, 400), cv2.FONT_HERSHEY_SIMPLEX, 2, color, 5, cv2.LINE_AA)
 
     game_start_end_time = time.time() - game_start_time
     if game_start_end_time <= 3:
         return img, True, game_start_end_time
     else:
         return img, False, game_start_end_time
+    
+def bgr():
+    blue = random.randint(0, 255)
+    green = random.randint(0, 255)
+    red = random.randint(0, 255)
+    return blue, green, red
 
 while cap.isOpened():
     ret, img = cap.read()
@@ -121,15 +135,15 @@ while cap.isOpened():
 
     if title_show:
         cv2.putText(img, 
-                    'Show the OK sign (OK)',
+                    'Show the OK sign and Start playing',
                     (20, 50),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     1, (0, 0, 0), 5, cv2.LINE_AA)
         cv2.putText(img, 
-                    'Show the OK sign (OK)',
+                    'Show the OK sign and Start playing',
                     (20, 50),
                     cv2.FONT_HERSHEY_SIMPLEX,
-                    1, (255, 0, 0), 2, cv2.LINE_AA)
+                    1, bgr(), 2, cv2.LINE_AA)
 
     if result.multi_hand_landmarks is not None:
 
@@ -163,7 +177,12 @@ while cap.isOpened():
                 cv2.putText(img, text=gesture[idx].upper(), 
                             org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 20)), 
                                 fontFace=cv2.FONT_HERSHEY_SIMPLEX, 
-                                fontScale=1, color=(255, 255, 255), 
+                                fontScale=1, color=(0, 0, 0), 
+                                thickness=5)
+                cv2.putText(img, text=gesture[idx].upper(), 
+                            org=(int(res.landmark[0].x * img.shape[1]), int(res.landmark[0].y * img.shape[0] + 20)), 
+                                fontFace=cv2.FONT_HERSHEY_SIMPLEX, 
+                                fontScale=1, color=(0, 0, 255), 
                                 thickness=2)
 
             
@@ -172,14 +191,14 @@ while cap.isOpened():
                 start_time = time.time()
                 countdown = True
 
-            mp_drawing.draw_landmarks(img, res, mp_hands.HAND_CONNECTIONS)
+            # mp_drawing.draw_landmarks(img, res, mp_hands.HAND_CONNECTIONS)
 
     if countdown:
         title_show = False
         img = start(img)
         count_start = True
 
-    if count_start and time.time() - start_time >= 3:
+    if count_start and time.time() - start_time >= 3.:
         countdown = False
         img = game_count(img, start_time)
         if time.time() - start_time >= 7:
@@ -192,7 +211,7 @@ while cap.isOpened():
         count_start = False
         print(user_choice)
         img, _, game_start_end_time = game_start(img, user_choice, computer_choice, game_start_time)
-        if game_start_end_time >= 3.2:
+        if game_start_end_time >= 4:
             game_start_bool = False
             title_show = True
 
