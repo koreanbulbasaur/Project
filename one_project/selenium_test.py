@@ -152,11 +152,11 @@ for n in range(1, number + 1):
         if a_text != '':
             a_text = int(a_text)
         if a_text == n and n > 1:
-            print(f'{n} 페이지 클릭')
+            print(f'{n} 페이지 이동')
             a.click()
             break
 
-    if n == 10:
+    if n % 10 == 0:
         get_table(n)
         next_btn = browser.find_element(By.CSS_SELECTOR, "img[alt='다음페이지']")
         next_btn.click()
