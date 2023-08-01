@@ -1,7 +1,16 @@
+## 파일명 무시
+LICENSE
+
 ## 확장명 무시
 *.exe
 *.md
+*.pyc
+*.wav
+*.ttf
 
 ## 폴더 무시
 alone/img_original/
 alone/img_gary/
+venv/
+datasets/
+samples/
