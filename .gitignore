@@ -1,5 +1,6 @@
 ## 확장명 무시
 *.exe
+*.md
 
 ## 폴더 무시
 alone/img_original/
