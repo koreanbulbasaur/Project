@@ -3,3 +3,71 @@ https://openweathermap.org/api
 
 날씨 한글 번역
 https://gist.github.com/choipd/e73201a4653a5e56e830
+
+NER
+https://wikidocs.net/30682
+
+한국뉴스_기업이름 추출
+https://github.com/moonjoo98/News_trend/blob/master/KR_NEWS/%5B%EA%B0%9C%EC%9D%B8_Project%5D%20%ED%95%9C%EA%B5%AD%EB%89%B4%EC%8A%A4_%EA%B8%B0%EC%97%85_KCELECTRA_NER.ipynb
+
+LSTM + CRF
+https://wikidocs.net/34156
+
+날씨 api
+https://openweathermap.org/api
+
+날씨 한글 번역
+https://gist.github.com/choipd/e73201a4653a5e56e830
+
+----- 전기수 출처 ----
+
+한국해양대학교 자연어처리
+https://github.com/kmounlp/NER
+
+프로세스 기반 병렬 처리 (라이브러리 : multiprocessing)
+https://docs.python.org/ko/3/library/multiprocessing.html
+
+array to bytes, bytes to array
+https://d-tail.tistory.com/32
+
+바이트 배열을 다시 numpy 배열로 변환
+https://stackoverflow.com/questions/53376786/convert-byte-array-back-to-numpy-array
+
+모듈 : io
+https://docs.python.org/ko/3/library/io.html
+
+BeautifulSoup와 requests로 웹 파싱해보기
+https://library.gabia.com/contents/9239/
+
+당일 이벤트 로그 출력
+https://pydole.tistory.com/120
+
+LSTM + CRF
+https://wikidocs.net/34156
+
+music/audio processing library Librosa 사용법
+https://bo-10000.tistory.com/m/80
+
+음성 데이터, 저장시 읽히지 않고 오류가 생길 때
+https://kaen2891.tistory.com/33/resampling
+
+beautifulsoup 사용법
+https://wikidocs.net/85739
+
+NER이란
+https://www.letr.ai/explore/tech-20210723
+
+소리 데이터 augmentation에 다양한 방법
+https://data-engineer.tistory.com/31/
+
+dsp.STFT
+https://kr.mathworks.com/help/dsp/ref/dsp.stft.html
+
+Gaussian Mixture Model
+https://ratsgo.github.io/speechbook/docs/am/gmm#gaussian-mixture-model-1
+
+Dynamic Time Warping
+https://databricks.com/blog/2019/04/30/understanding-dynamic-time-warping.html
+
+단어 임베딩
+https://www.tensorflow.org/text/guide/word_embeddings?hl=ko

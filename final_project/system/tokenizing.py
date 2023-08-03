@@ -1,15 +1,8 @@
-# from mecab import MeCab
-# from pprint import pprint
+import MeCab
 
-# mecab = MeCab()
+text = "1시간 알람 맞쳐줘"
+text1 = '바탕화면에 있는 PPT 파일 켜줘'
 
-# text = '1시간 알람 맞쳐줘'
-# text = '1시에 알람 맞쳐'
-
-# pprint(mecab.pos(text))
-
-from nltk import word_tokenize, pos_tag, ne_chunk
-
-sen = "1시간 알람 맞쳐줘"
-tokenized_sen = pos_tag(word_tokenize(sen))
-print(tokenized_sen)
+mecab = MeCab.Tagger()
+out = mecab.parse(text1)
+print(out)
