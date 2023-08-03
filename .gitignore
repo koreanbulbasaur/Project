@@ -8,6 +8,7 @@ LICENSE
 *.wav
 *.ttf
 *.mp3
+*.v2
 
 ## 폴더 무시
 alone/img_original/
@@ -15,3 +16,4 @@ alone/img_gary/
 venv/
 datasets/
 samples/
+NER-master/

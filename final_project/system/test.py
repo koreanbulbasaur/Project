@@ -1,5 +1,1 @@
-def test(test, **akrs):
-    print(test)
-    print(akrs)
-
-test(1, 2, 3)
+from .test import main
