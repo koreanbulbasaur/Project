@@ -1,0 +1,5 @@
+날씨 api
+https://openweathermap.org/api
+
+날씨 한글 번역
+https://gist.github.com/choipd/e73201a4653a5e56e830
