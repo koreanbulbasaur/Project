@@ -1,5 +1,6 @@
 ## 파일명 무시
 LICENSE
+NER
 
 ## 확장명 무시
 *.exe
@@ -17,3 +18,4 @@ venv/
 datasets/
 samples/
 NER-master/
+NER/
