@@ -10,21 +10,21 @@ def find_file(root_dir, filename):
     return None
 
 # 파일 실행
-def window_program(tsk):
+def run_program(tsk):
     text = None
     # 계산기 실행
     if 'cal' in tsk:
-        subprocess.run("calc.exe", shell=True)
+        subprocess.Popen(["calc.exe"])
         text = '계산기를'
 
     # 메모장 실행
-    elif 'notepad' in tsk:
-        subprocess.run('notepad.exe', shell=True)
+    elif 'notepad' == tsk:
+        subprocess.Popen(['notepad.exe'])
         text = '메모장을'
 
     # 그림판 실행
     elif 'paint' in tsk:
-        subprocess.run("mspaint.exe", shell=True)
+        subprocess.Popen(["mspaint.exe"])
         text = '그림판을'
 
     # ppt 실행
@@ -33,7 +33,7 @@ def window_program(tsk):
         target_filename = "POWERPNT.EXE"
 
         found_path = find_file(search_root, target_filename)
-        subprocess.run(found_path)
+        subprocess.Popen([found_path])
         text = '피피티를'
 
     # 엑셀 실행
@@ -42,7 +42,7 @@ def window_program(tsk):
         target_filename = "EXCEL.EXE"
 
         found_path = find_file(search_root, target_filename)
-        subprocess.run(found_path)
+        subprocess.Popen([found_path])
         text = '엑셀를'
 
     # 워드 실행
@@ -51,7 +51,7 @@ def window_program(tsk):
         target_filename = "WINWORD.EXE"
 
         found_path = find_file(search_root, target_filename)
-        subprocess.run(found_path)
+        subprocess.Popen([found_path])
         text = '워드를'
 
     else:

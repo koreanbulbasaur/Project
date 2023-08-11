@@ -1,10 +1,8 @@
+# 역할
 chatgpt_role = "당신은 AI 스피커 도우미 입니다. 제가 문장을 보내면 당신은 location, \
-    task, action, time, number 가 포함되어 있는 단어들이 있다면 영어로 출력해주세요. 날씨를 알려줄때는 location을 한국어 그대로 알려주세요"
+    task, action, time, number, date 가 포함되어 있는 단어들이 있다면 영어로 출력해주세요 \
+    단 지역명이 포함 되어 있다면 지역명은 한글 그대로 반환해주세요"
 
-'''
-    {"role": "user", "content": ''}, 
-    {"role": "assistant", "content": ""},
-'''
 
 def chat(ms):
     messages=[
@@ -29,9 +27,20 @@ def chat(ms):
         {"role": "user", "content": '소리 꺼줘'}, 
         {"role": "assistant", "content": "(task : volume), (action : set), (number : 0)"},
 
-        {"role": "user", "content": '오늘 서울 날씨 알려줘'}, 
-        {"role": "assistant", "content": "(location : 서울), (task : weather), (action : inform), (time : today)"},
+        {"role": "user", "content": '내일 오전 날씨 알려줘'}, 
+        {"role": "assistant", "content": "(location : 서울), (task : weather), (action : inform), (date : tomorrow), (time : morning)"},
+
+        {"role": "user", "content": '모레 뒤 날씨를 알려줘'}, 
+        {"role": "assistant", "content": "(task : weather), (action : inform), (date : after 2)"},
+
+        {"role": "user", "content": '오늘 날씨'}, 
+        {"role": "assistant", "content": "(task : weather), (action : inform), (date : today)"},
 
         {"role": "user", "content": ms}
     ]
     return messages
+
+'''
+    {"role": "user", "content": ''}, 
+    {"role": "assistant", "content": ""},
+'''
