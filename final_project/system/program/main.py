@@ -3,7 +3,7 @@ from program.mode.volume_mode import volume_program
 from program.mode.web_mode import web_open_program
 from program.mode.run_mode import run_program
 from program.mode.weather_mode import weather_program
-def task_app(data):
+def task_app(data, openai_key):
 
     act_open_list = ['open', 'excute']
 
@@ -39,7 +39,7 @@ def task_app(data):
                     tim = 'now'
                 if not(loc):
                     loc = '서울'
-                output_text = weather_program(tim, dat, loc)
+                output_text = weather_program(tim, dat, loc, openai_key)
 
         elif act == 'set':
             # 화면 밝기

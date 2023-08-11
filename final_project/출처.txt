@@ -1,9 +1,3 @@
-날씨 api
-https://openweathermap.org/api
-
-날씨 한글 번역
-https://gist.github.com/choipd/e73201a4653a5e56e830
-
 NER
 https://wikidocs.net/30682
 
@@ -27,6 +21,9 @@ https://github.com/warnikchow/paraKQC/blob/master/data/paraKQC_v1.txt
 
 한국어 자연어 처리 데이터셋 목록
 https://littlefoxdiary.tistory.com/42
+
+paramiko 사용법
+https://velog.io/@engineer_km/paramiko
 
 ----- 전기수 출처 ----
 

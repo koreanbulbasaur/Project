@@ -13,7 +13,7 @@ def bright_program(num):
 
 # 화면 밝기 계산
 def level(curr_n, n):
-    if n == 'maximum':
+    if n in 'maximum':
         output_level = 100
 
     elif n == 'medium':
