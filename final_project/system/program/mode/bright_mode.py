@@ -1,4 +1,5 @@
 import screen_brightness_control as sbc
+import random
 
 def bright_program(num):
     # 현재 화면 모니터 밝기
@@ -7,6 +8,9 @@ def bright_program(num):
     brightness_level = level(current_brightness, num)
 
     sbc.set_brightness(brightness_level)
+    random_n = random.randint(0, 100)
+    if brightness_level == random_n:
+        return '짠!'
 
     text = f"화면 밝기를 {brightness_level}으로 조절해드렸습니다."
     return text

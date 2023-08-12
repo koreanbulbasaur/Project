@@ -3,14 +3,17 @@ from program.mode.volume_mode import volume_program
 from program.mode.web_mode import web_open_program
 from program.mode.run_mode import run_program
 from program.mode.weather_mode import weather_program
+from program.mode.game_mode import game_program
+from program.mode.search_mode import search_program
 def task_app(data, openai_key):
 
     act_open_list = ['open', 'excute']
 
     web_program = ['naver whale', 'chrome', 'bing']
     program_list = ['cal', 'calculator', 'notepad', 'paint', 'ppt', 'excel', 'word']
+    game_act = ['roll', 'pick', 'flip', 'toss']
 
-    tim = loc = tsk = act = num = dat = None
+    tim = loc = tsk = act = num = dat = que = None
     
     # data 딕셔너리에 있는 키와 값들을 반복문으로 순회
     for key, value in data.items():
@@ -29,8 +32,12 @@ def task_app(data, openai_key):
                 num = value.lower()
             elif key == 'date':
                 dat = value.lower()
+            elif key == 'query':
+                que = value.lower()
 
-    if act:
+    if que:
+        output_text = search_program(que, task=tsk)
+    elif act:
         # 정보
         if act == 'inform':
             # 날씨
@@ -58,6 +65,9 @@ def task_app(data, openai_key):
             # 컴퓨터 프로그램 열기
             elif tsk in program_list:
                 output_text = run_program(tsk)
+        
+        elif act in game_act:
+            output_text = game_program(tsk, num)
         else:
             output_text = '학습되지 않은 명령어 입니다'
     else:

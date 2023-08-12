@@ -1,7 +1,8 @@
 # 역할
 chatgpt_role = "당신은 AI 스피커 도우미 입니다. 제가 문장을 보내면 당신은 location, \
     task, action, time, number, date 가 포함되어 있는 단어들이 있다면 영어로 출력해주세요 \
-    단 지역명이 포함 되어 있다면 지역명은 한글 그대로 반환해주세요"
+    단 지역명이 포함 되어 있다면 지역명은 한글 그대로 반환해주세요.\
+        query 부분은 그대로 반환해주세요."
 
 
 def chat(ms):
@@ -35,6 +36,15 @@ def chat(ms):
 
         {"role": "user", "content": '오늘 날씨'}, 
         {"role": "assistant", "content": "(task : weather), (action : inform), (date : today)"},
+
+        {"role": "user", "content": '주사위 던져줘'}, 
+        {"role": "assistant", "content": "(task : dice), (action : roll)"},
+
+        {"role": "user", "content": '1에서 6 중에서 하나만 골라봐'}, 
+        {"role": "assistant", "content": "(task : choose), (action : pick), (number : 1-6)"},
+
+        {"role": "user", "content": '동전을 던져줘'}, 
+        {"role": "assistant", "content": "(task : coin), (action : flip)"},
 
         {"role": "user", "content": ms}
     ]

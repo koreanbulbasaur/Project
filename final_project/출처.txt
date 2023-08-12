@@ -25,6 +25,12 @@ https://littlefoxdiary.tistory.com/42
 paramiko 사용법
 https://velog.io/@engineer_km/paramiko
 
+소리 모음 사이트
+https://gongu.copyright.or.kr/gongu/wrt/wrt/view.do?wrtSn=13287308&menuNo=200020
+
+동전 던지는 소리
+https://pgtd.tistory.com/170
+
 ----- 전기수 출처 ----
 
 한국해양대학교 자연어처리

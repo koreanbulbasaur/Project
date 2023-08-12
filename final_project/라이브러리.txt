@@ -1,0 +1,15 @@
+time
+openai
+screen_brightness_control
+ctypes
+comtypes
+pycaw
+os
+subprocess
+fnmatch
+requests
+googlemaps
+datetime
+BeautifulSoup
+random
+playsound
