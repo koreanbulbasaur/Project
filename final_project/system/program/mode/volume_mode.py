@@ -20,6 +20,7 @@ def volume_program(num):
     text = f'지금 소리를 {sound_level}으로 조절했습니다'
     return text
 
+# 소리 값을 숫자로 반환
 def level(curr_n, n):
     n = str(n)
     if 'max' in n:

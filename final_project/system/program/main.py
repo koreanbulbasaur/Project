@@ -5,12 +5,20 @@ from program.mode.run_mode import run_program
 from program.mode.weather_mode import weather_program
 from program.mode.game_mode import game_program
 from program.mode.search_mode import search_program
+
+
 def task_app(data, openai_key):
 
+    # 인터넷창과 컴퓨터 프로그램 실행 단어 모음
     act_open_list = ['open', 'excute']
 
+    # 인터넷 창 여는 프로그램 모음
     web_program = ['naver whale', 'chrome', 'bing']
+
+    # 컴퓨터 프로그램 모음
     program_list = ['cal', 'calculator', 'notepad', 'paint', 'ppt', 'excel', 'word']
+
+    # 게임 리스트
     game_act = ['roll', 'pick', 'flip', 'toss']
 
     tim = loc = tsk = act = num = dat = que = None
@@ -36,7 +44,9 @@ def task_app(data, openai_key):
                 que = value.lower()
 
     if que:
+        # 검색 
         output_text = search_program(que, task=tsk)
+
     elif act:
         # 정보
         if act == 'inform':
@@ -65,12 +75,13 @@ def task_app(data, openai_key):
             # 컴퓨터 프로그램 열기
             elif tsk in program_list:
                 output_text = run_program(tsk)
-        
+
+        # 간단한 게임 실행
         elif act in game_act:
             output_text = game_program(tsk, num)
         else:
             output_text = '학습되지 않은 명령어 입니다'
     else:
         output_text = '다시 한번 말해주세요'
-    
+
     return output_text

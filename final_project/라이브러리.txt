@@ -12,4 +12,4 @@ googlemaps
 datetime
 BeautifulSoup
 random
-playsound
+playsound (pip install playsound==1.2.2)

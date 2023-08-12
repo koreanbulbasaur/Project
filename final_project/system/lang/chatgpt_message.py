@@ -46,11 +46,14 @@ def chat(ms):
         {"role": "user", "content": '동전을 던져줘'}, 
         {"role": "assistant", "content": "(task : coin), (action : flip)"},
 
+        {"role": "user", "content": '유튜브에서 asmr 틀어줘'}, 
+        {"role": "assistant", "content": "(task : YouTube), (action : play), (query : asmr)"},
+
         {"role": "user", "content": ms}
     ]
     return messages
 
 '''
-    {"role": "user", "content": ''}, 
-    {"role": "assistant", "content": ""},
+    {"role": "user", "content" : ''}, 
+    {"role": "assistant", "content" : ""},
 '''

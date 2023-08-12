@@ -4,19 +4,30 @@ from program.mode.weather.get_time import get_date, get_tim
 from program.mode.weather.weather_id import *
 from program.mode.weather.get_today_weather import today_weather
 
-def find_weather(tim, dat, loc):
+def find_weather(tim='now', dat='today', loc='서울'):
     API_KEY = '19c3e32076dde8ae7009a7f9e463cdc5'  # 여기에 API 키를 입력하세요
+
+    # 위치를 위도와 경도로 반환
     lat, lon = where(loc)
+
+    # 날짜가 오늘일 경우 네이버에서 검색함
     if dat == 'today':
         weather_data = today_weather(loc)
         return False, weather_data
+    
+    # 오늘이 아닌 다른 날은 숫자로 반환
     else:
         error, date = get_date(dat)
+
+    # 4일 뒤의 날씨는 못가져옴
     if error:
         return error, weather_data
+
+    # 시간을 시분초로 반환
     time = get_tim(tim)
     date_time = date + ' ' + time
 
+    # openweathermap에서 날씨 예보 정보를 가져옴
     BASE_URL = f"https://api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API_KEY}&units=metric"
 
     response = requests.get(BASE_URL)
@@ -39,6 +50,7 @@ def find_weather(tim, dat, loc):
 
     return error, weather_data
 
+# 하루의 최대 기온과 최소 기온을 구하는 함수
 def temp_min_max(value, datas, date):
     temp_list = []
     if value == 'max':

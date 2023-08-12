@@ -1,9 +1,10 @@
 import random
 from playsound import playsound
+# pip install playsound==1.2.2
 
 def game_dice():
     i = random.randint(1, 6)
-    playsound('./program/mode/game/dice_roll.wav')
+    playsound(r'program/mode/game/dice_roll.wav')
     if i in [1, 3, 6]:
         return f'{i}이 나왔습니다.'
     else:
