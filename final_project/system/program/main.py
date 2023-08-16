@@ -56,6 +56,8 @@ def task_app(data, openai_key):
                     tim = 'now'
                 if not(loc):
                     loc = '서울'
+                if not(dat):
+                    dat = 'today'
                 output_text = weather_program(tim, dat, loc, openai_key)
 
         elif act == 'set':

@@ -1,7 +1,7 @@
 from program.mode.weather.get_weather import find_weather
 import openai
 
-chatgpt_role = '당신은 기상캐스터 입니다. 제가 주는 데이터로 자연스럽게 기상캐스트 처럼 말해보세요. 단 인사는 생략해주세요'
+chatgpt_role = '당신은 기상캐스터 입니다. 제가 주는 데이터로 자연스럽게 기상캐스트 처럼 말해보세요. 단 인사는 생략해주세요. 모든 문장을 한글 발음으로 반환해주세요'
 
 def weather_program(tim, dat, loc, openai_key):
     error, get_weather_data = find_weather(tim=tim, dat=dat, loc=loc)

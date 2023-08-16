@@ -4,7 +4,7 @@ from program.main import task_app
 import time
 
 # openai 키
-openai_key = "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"
+openai_key = "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"
 
 def ine_ai(text):
     # 프로그램 시작 시간
@@ -28,3 +28,8 @@ def ine_ai(text):
     print('time : {:.2f} 초'.format(elapsed_time))
 
     return(talk_text)
+
+while 1:
+    txt = input('user : ')
+    final = ine_ai(txt)
+    print(final)

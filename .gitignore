@@ -10,6 +10,7 @@ NER
 *.ttf
 *.mp3
 *.v2
+*.zip
 
 ## 폴더 무시
 alone/img_original/
